@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/o")
+@RequestMapping("/")
 @AllArgsConstructor
 public class SampleController {
     private final UserService userService;
@@ -17,21 +17,5 @@ public class SampleController {
     @GetMapping("/oauth2")
     public UserGoogleResponse create(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         return userService.createAndSaveUserByGmail(oAuth2AuthenticationToken);
-
-
-//    @GetMapping("/oauth2")
-//    public Object currentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-//        JSONObject json = new JSONObject(oAuth2AuthenticationToken.getPrincipal());
-//
-//        System.out.println();
-//
-//        System.out.println("HELLO WORLD");
-//        //System.out.println(oAuth2AuthenticationToken.getPrincipal());
-//       // User user = (User) oAuth2AuthenticationToken.getPrincipal();
-//
-//        return oAuth2AuthenticationToken.getPrincipal().getAttributes();
-//
-//    }
-
 
 }}
