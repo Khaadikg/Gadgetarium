@@ -32,6 +32,7 @@ public class UserService {
         user.setCreateDate(LocalDate.now());
         userRepository.save(user);
         return mapToGoogleResponse(user);
+
     }
 
     public UserGoogleResponse mapToGoogleResponse(User user) {
