@@ -23,12 +23,15 @@ public class Review {
     private List<Product> products;
     private String commentary;
     private int rade;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST})
     @JoinTable(name = "reviews_to_response_reviews",
             joinColumns = @JoinColumn(name = "reviews_id"),
             inverseJoinColumns = @JoinColumn(name = "response_reviews_id"))
     private List<ResponseToReview> responseToReviews;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "users_reviews",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<User> users;
 
 }

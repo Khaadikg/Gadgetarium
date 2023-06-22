@@ -19,7 +19,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name ="categories_sub_categories",
+    joinColumns = @JoinColumn(name="category_id"),
+    inverseJoinColumns = @JoinColumn(name = "sub_category_id"))
     private List<SubCategory> subCategories;
 
 }

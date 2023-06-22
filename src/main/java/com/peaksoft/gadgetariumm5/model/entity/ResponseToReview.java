@@ -19,8 +19,8 @@ public class ResponseToReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String massage;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST},mappedBy = "responseToReviews")
     private List<Review> reviews;
-    @ManyToOne
+    @ManyToOne(cascade ={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     private User user;
 }
