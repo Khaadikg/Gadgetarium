@@ -17,5 +17,4 @@ public class SampleController {
     @GetMapping("/oauth2")
     public UserGoogleResponse create(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         return userService.createAndSaveUserByGmail(oAuth2AuthenticationToken);
-
 }}
