@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,17 +33,18 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @CreatedDate
+    private LocalDate createDate;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     @JoinColumn(name = "bucked_id")
     private Bucked bucked;
     @Transient
     private Long buckedId;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "users")
     private List<Review> reviews;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<ResponseToReview> responseToReviews;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;
-
 
 }

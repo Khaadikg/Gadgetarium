@@ -50,14 +50,17 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Review> reviews;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<SubCategory> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
+    @JoinTable(name = "bucked_products",
+            joinColumns = @JoinColumn(name = "bucked_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Bucked bucked;
     private int discount;
 

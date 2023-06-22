@@ -29,7 +29,7 @@ public class Order {
     private LocalDateTime created;
     @UpdateTimestamp
     private LocalDateTime update;
-    @ManyToOne
+    @ManyToOne(cascade ={CascadeType.REFRESH,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
     private User user;
     private Long sum;
@@ -38,8 +38,9 @@ public class Order {
     private Payment payment;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL )
+    @JoinColumn(name = "order_details_id")
     private List<OrderDetails> details;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     private Bucked bucked;
 }

@@ -24,15 +24,12 @@ public class Bucked {
     private int discount;
     @Column(name = "total")
     private int total;
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name ="user_id")
     private User user;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
-    @JoinTable(name = "bucked_product",
-            joinColumns = @JoinColumn(name = "bucked_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
     private Long grandTotal;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "bucked")
     private List<Order> orders;
 }
