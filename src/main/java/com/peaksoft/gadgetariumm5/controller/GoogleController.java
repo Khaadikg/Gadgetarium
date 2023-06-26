@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/oauth")
 @AllArgsConstructor
-public class SampleController {
+public class GoogleController {
     private final UserService userService;
 
-    @GetMapping("/oauth2")
+    @GetMapping("/registration")
     public UserGoogleResponse create(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         return userService.createAndSaveUserByGmail(oAuth2AuthenticationToken);
     }
