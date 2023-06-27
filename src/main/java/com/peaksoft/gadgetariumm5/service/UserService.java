@@ -5,6 +5,7 @@ import com.peaksoft.gadgetariumm5.dto.UserRequest;
 import com.peaksoft.gadgetariumm5.dto.UserResponse;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
+
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
