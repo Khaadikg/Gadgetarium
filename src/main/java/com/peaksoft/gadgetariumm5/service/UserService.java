@@ -3,6 +3,7 @@ package com.peaksoft.gadgetariumm5.service;
 import com.peaksoft.gadgetariumm5.dto.UserGoogleResponse;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
+
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -45,6 +48,4 @@ public class UserService {
                 .address(user.getAddress())
                 .create(LocalDate.now()).build();
     }
-
-
 }

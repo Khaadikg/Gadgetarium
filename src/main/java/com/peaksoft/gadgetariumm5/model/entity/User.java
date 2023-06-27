@@ -27,9 +27,11 @@ public class User {
     private String lastName;
     @Column(name = "email")
     private String email;
+    private String password;
     @Column(name = "phone_number")
     private String phoneNumber;
     private String address;
+    private int pinCod;
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
