@@ -8,21 +8,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/email")
 public class ResetPasswordController {
-
     private final EmailService emailService;
 
     @Autowired
     public ResetPasswordController(EmailService emailService) {
         this.emailService = emailService;
     }
-
     @GetMapping("/resetPassword")
     public String sendEmail(@RequestParam String email) {
         User user = emailService.resetPassword(email);
         emailService.sendSimpleMessage(user.getPinCod(), email);
         return user.getEmail();
     }
-
     @GetMapping("/changePassword")
     public String changePassword(@RequestParam int pinCode,
                                  @RequestParam String password,
@@ -30,5 +27,4 @@ public class ResetPasswordController {
                                  @RequestParam String email) {
         return emailService.checkPinCode(pinCode, email, password, passwordConfirm);
     }
-
 }
