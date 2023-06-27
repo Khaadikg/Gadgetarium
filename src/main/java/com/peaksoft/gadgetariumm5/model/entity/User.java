@@ -36,12 +36,10 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
     private String address;
-    private int pinCod;
+    private int pinCode;
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
-
-    private String password;
     @CreatedDate
     private LocalDate createDate;
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")

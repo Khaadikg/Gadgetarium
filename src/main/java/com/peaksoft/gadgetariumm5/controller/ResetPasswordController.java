@@ -17,7 +17,7 @@ public class ResetPasswordController {
     @GetMapping("/resetPassword")
     public String sendEmail(@RequestParam String email) {
         User user = emailService.resetPassword(email);
-        emailService.sendSimpleMessage(user.getPinCod(), email);
+        emailService.sendSimpleMessage(user.getPinCode(), email);
         return user.getEmail();
     }
     @GetMapping("/changePassword")

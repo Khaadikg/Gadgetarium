@@ -22,9 +22,9 @@ public class EmailService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
-    public void sendSimpleMessage(int pinCod, String email) {
+    public void sendSimpleMessage(int stringPinCode, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
-        String pinCode = String.valueOf(pinCod);
+        String pinCode = String.valueOf(stringPinCode);
         message.setTo(email);
         message.setFrom("tairovasan11@gmail.com");
         message.setSubject("Password change");
@@ -35,8 +35,8 @@ public class EmailService {
 
     public int pinCode() {
         Random random = new Random();
-        int pinCod = random.nextInt(1000, 9999);
-        return pinCod;
+        int pinCode = random.nextInt(1000, 9999);
+        return pinCode;
     }
 
     public String checkPinCode(int pinCheck, String email, String password, String confirm) {
@@ -44,7 +44,7 @@ public class EmailService {
             return "NOT EQUALS";
         } else {
             User user = repository.findByEmail(email).get();
-            if (pinCheck == user.getPinCod()) {
+            if (pinCheck == user.getPinCode()) {
                 user.setPassword(encoder.encode(password));
                 repository.save(user);
                 return "SUCCESS";
@@ -55,7 +55,7 @@ public class EmailService {
 
     public User resetPassword(String email) {
         User user = repository.findByEmail(email).get();
-        user.setPinCod(pinCode());
+        user.setPinCode(pinCode());
         return repository.save(user);
     }
 }
