@@ -1,21 +1,60 @@
 package com.peaksoft.gadgetariumm5.service;
 
 import com.peaksoft.gadgetariumm5.dto.UserGoogleResponse;
+import com.peaksoft.gadgetariumm5.dto.UserRequest;
+import com.peaksoft.gadgetariumm5.dto.UserResponse;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
+
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+
 @Service
+@RequiredArgsConstructor
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
+
+    public UserResponse registration(UserRequest request) throws Exception {
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setEmail(request.getEmail());
+        if (request.getConfirmation().equals(request.getPassword())) {
+            user.setPassword(encoder.encode(request.getPassword()));
+
+        } else {
+            throw new Exception("Password again!");
+        }
+        user.setRole(Role.USER);
+        user.setCreateDate(LocalDate.now());
+        userRepository.save(user);
+        return mapToUserResponse(user);
+    }
+
+    public UserResponse mapToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .localDate(user.getCreateDate())
+                .role(user.getRole())
+                .build();
+    }
 
     public UserGoogleResponse createAndSaveUserByGmail(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         JSONObject json = new JSONObject(oAuth2AuthenticationToken.getPrincipal());
@@ -32,7 +71,6 @@ public class UserService {
         user.setCreateDate(LocalDate.now());
         userRepository.save(user);
         return mapToGoogleResponse(user);
-
     }
 
     public UserGoogleResponse mapToGoogleResponse(User user) {
@@ -45,6 +83,4 @@ public class UserService {
                 .address(user.getAddress())
                 .create(LocalDate.now()).build();
     }
-
-
 }
