@@ -36,6 +36,7 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
     private String address;
+
     private int pinCode;
     @Enumerated(EnumType.STRING)
     @Column(name = "role")

@@ -29,6 +29,7 @@ public class Bucked {
     private User user;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
     private List<Product> products;
+    @Column(name = "grand_total")
     private Long grandTotal;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "bucked")
     private List<Order> orders;
