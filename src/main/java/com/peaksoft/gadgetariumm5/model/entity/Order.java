@@ -38,7 +38,7 @@ public class Order {
     private Payment payment;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToMany(cascade = CascadeType.ALL )
+    @OneToMany( cascade = CascadeType.ALL)
     @JoinColumn(name = "order_details_id")
     private List<OrderDetails> details;
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})

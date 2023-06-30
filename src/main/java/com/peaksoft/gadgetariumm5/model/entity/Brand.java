@@ -1,9 +1,7 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.List;
 @Table(name = "brands")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Brand {
@@ -20,6 +19,7 @@ public class Brand {
     private Long id;
     @JoinColumn(name = "brand_name")
     private String brandName;
-    @OneToMany
+    @OneToMany()
+    @JsonIgnore
     private List<Product> products;
 }

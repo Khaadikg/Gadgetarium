@@ -25,7 +25,7 @@ public class Product {
     private int price;
     private int article;
     private File file;
-    @ManyToOne
+    @ManyToOne()
     private Brand brand;
     private String screen;
     private String color;
@@ -45,8 +45,8 @@ public class Product {
     private Gender gender;
     @Enumerated(EnumType.STRING)
     private BodyShape bodyShape;
-    @OneToMany
-    @JoinTable(name = "products_review",
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "products_reviews",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Review> reviews;
@@ -54,13 +54,11 @@ public class Product {
     @JoinTable(name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<SubCategory> categories;
+    private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
     @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
-    @JoinTable(name = "bucked_products",
-            joinColumns = @JoinColumn(name = "bucked_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinColumn(name = "bucked_id")
     private Bucked bucked;
     private int discount;
 

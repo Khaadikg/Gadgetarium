@@ -50,6 +50,7 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.ALL,mappedBy = "users")
     private List<Review> reviews;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @JoinColumn(name = "response_to_review_id")
     private List<ResponseToReview> responseToReviews;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;

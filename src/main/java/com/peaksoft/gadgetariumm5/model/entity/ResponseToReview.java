@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "response_to_review")
+@Table(name = "responses_to_reviews")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,5 +22,6 @@ public class ResponseToReview {
     @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST},mappedBy = "responseToReviews")
     private List<Review> reviews;
     @ManyToOne(cascade ={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name="user_id")
     private User user;
 }

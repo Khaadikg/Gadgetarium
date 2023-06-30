@@ -19,12 +19,12 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String photo;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},mappedBy = "products")
     private List<Product> products;
     private String commentary;
     private int rade;
     @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST})
-    @JoinTable(name = "reviews_to_response_reviews",
+    @JoinTable(name = "reviews_to_responses_reviews",
             joinColumns = @JoinColumn(name = "reviews_id"),
             inverseJoinColumns = @JoinColumn(name = "response_reviews_id"))
     private List<ResponseToReview> responseToReviews;
