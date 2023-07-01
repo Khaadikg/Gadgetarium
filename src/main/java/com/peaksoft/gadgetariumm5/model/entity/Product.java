@@ -58,9 +58,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
     @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
-    @JoinTable(name = "bucked_products",
-            joinColumns = @JoinColumn(name = "bucked_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinColumn(name = "bucket_id")
     private Bucked bucked;
     private int discount;
 

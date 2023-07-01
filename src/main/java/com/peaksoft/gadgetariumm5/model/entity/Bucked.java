@@ -21,16 +21,16 @@ public class Bucked {
     @Column(name = "amount")
     private int amount;
     @Column(name = "discount")
-    private int discount;
+    private double discount;
     @Column(name = "total")
-    private int total;
+    private double total;
     @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name ="user_id")
     private User user;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
     private List<Product> products;
     @Column(name = "grand_total")
-    private Long grandTotal;
+    private double grandTotal;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "bucked")
     private List<Order> orders;
 }

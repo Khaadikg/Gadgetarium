@@ -7,6 +7,7 @@ import com.peaksoft.gadgetariumm5.model.entity.Bucked;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
 
+import com.peaksoft.gadgetariumm5.repository.BasketRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -25,6 +26,7 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    private BasketRepository basketRepository;
     private final BCryptPasswordEncoder encoder;
 
     public UserResponse registration(UserRequest request) throws Exception {
@@ -48,6 +50,7 @@ public class UserService {
         userRepository.save(user);
         return mapToUserResponse(user);
     }
+
 
     public UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
@@ -74,6 +77,7 @@ public class UserService {
         String roleName = String.valueOf(roles.getJSONObject(0).get("authority"));
         user.setRole(Role.valueOf(roleName.substring(5)));
         user.setCreateDate(LocalDate.now());
+
         userRepository.save(user);
         return mapToGoogleResponse(user);
     }
