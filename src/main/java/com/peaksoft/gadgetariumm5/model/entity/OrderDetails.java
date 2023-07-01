@@ -23,7 +23,7 @@ public class OrderDetails {
     private Product product;
     private int amount;
     private int price;
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "order_id")
     private Order order;
     @Enumerated(EnumType.STRING)

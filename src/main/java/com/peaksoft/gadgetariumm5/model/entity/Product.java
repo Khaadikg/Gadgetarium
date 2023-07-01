@@ -1,6 +1,7 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
 import com.peaksoft.gadgetariumm5.model.enums.*;
+import com.peaksoft.gadgetariumm5.model.enums.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int price;
+    private double price;
     private int article;
+    private int  inStock;
     private File file;
     @ManyToOne()
     private Brand brand;
@@ -38,14 +40,16 @@ public class Product {
     private int simCard;
     private int warranty;
     private String processor;
-    private int weight;
+    private double weight;
     @Enumerated(EnumType.STRING)
     private WirelessInterface wirelessInterface;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Enumerated(EnumType.STRING)
     private BodyShape bodyShape;
-    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @Enumerated(EnumType.STRING)
+    private SubCategory subCategory;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "products_reviews",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
@@ -57,7 +61,7 @@ public class Product {
     private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "bucked_id")
     private Bucked bucked;
     private int discount;

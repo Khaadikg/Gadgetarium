@@ -26,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtTokenFilter filter;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,22 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-        //        .antMatchers("/api/jwt/**").permitAll()
+                .antMatchers("/api/jwt/**").permitAll()
                 .antMatchers("/products/search").permitAll()
                 .anyRequest().authenticated()
                 .and().oauth2Login().and().sessionManagement()
-              .sessionCreationPolicy(SessionCreationPolicy.ALWAYS).
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS).
                 and()
-                . addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-//        http.cors().and().csrf().disable()
-//                .authorizeRequests()
-//               // .antMatchers("/api/jwt/**").permitAll()
-//                .anyRequest()
-//                .authenticated().and().oauth2Login();
-//                .and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
 
     }
 
