@@ -1,7 +1,6 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
 import com.peaksoft.gadgetariumm5.model.enums.*;
-import com.peaksoft.gadgetariumm5.model.enums.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,16 +17,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double price;
+    private int discount;
+    private int inStock;
     private int article;
-    private int  inStock;
     private File file;
-    @ManyToOne()
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "brand_id")
     private Brand brand;
     private String screen;
     private String color;
@@ -62,9 +64,8 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "bucked_id")
-    private Bucked bucked;
-    private int discount;
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
 
 
 }

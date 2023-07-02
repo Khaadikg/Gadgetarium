@@ -43,10 +43,10 @@ public class User implements UserDetails {
     @CreatedDate
     private LocalDate createDate;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    @JoinColumn(name = "bucked_id")
-    private Bucked bucked;
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
     @Transient
-    private Long buckedId;
+    private Long basketId;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Review> reviews;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserService service;
 
-
     @PostMapping("/sign-up")
     public UserResponse signUp(@RequestBody UserRequest request) throws Exception {
         return service.registration(request);

@@ -19,7 +19,7 @@ public class Brand {
     private Long id;
     @JoinColumn(name = "brand_name")
     private String brandName;
-    @OneToMany()
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "brand")
+   @JsonIgnore
     private List<Product> products;
 }

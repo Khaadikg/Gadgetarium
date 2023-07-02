@@ -1,6 +1,5 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
-import com.peaksoft.gadgetariumm5.model.enums.Delivery;
 import com.peaksoft.gadgetariumm5.model.enums.Payment;
 import com.peaksoft.gadgetariumm5.model.enums.Status;
 import lombok.AllArgsConstructor;
@@ -42,5 +41,5 @@ public class Order {
     @JoinColumn(name = "order_details_id")
     private List<OrderDetails> details;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    private Bucked bucked;
+    private Basket basket;
 }

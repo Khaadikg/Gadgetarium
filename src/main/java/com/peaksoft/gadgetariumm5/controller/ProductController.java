@@ -20,5 +20,6 @@ public class ProductController {
                                            @RequestParam int page,
                                            @RequestParam int size) {
         return productService.searchAndPagination(text, page, size);
+
     }
 }
