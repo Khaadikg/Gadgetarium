@@ -9,11 +9,14 @@ VALUES ('APPLE'),
        ('HUAWEI'),
        ('XIAOMI');
 
-INSERT INTO products(article, body_shape, color, discount, file, gender, memory, name, operating_system, price, processor, rating, release_date, screen, sim_card, warranty, water_resistance, weight, wireless_interface, brand_id)
-VALUES ('0214', 'квадрат', 'black', '15', null, 'FEMALE', '125Gb', 'iphone 12', 'IOS', '95000', 'A15 Bionic', '5', '2022.12.26', '53 (2340*1080) IPS', '1', '12', null, '173', null, 1);
+INSERT INTO products(article, body_shape,sub_category, color, discount, file, gender, memory, name, operating_system, price,
+                     processor, rating, release_date, screen, sim_card, warranty, water_resistance, weight,
+                     wireless_interface, brand_id)
+VALUES ('0214', 'квадрат',' RECTANGULAR' 'black', '15', null, 'FEMALE', '125Gb', 'iphone 12', 'IOS', '95000', 'A15 Bionic', '5',
+        '2022.12.26', '53 (2340*1080) IPS', '1', '12', null, '173', null, 1);
 
 INSERT INTO brands_products(brand_id, products_id)
-VALUES (1,1);
+VALUES (1, 1);
 
 INSERT INTO bucked(AMOUNT, DISCOUNT, GRAND_TOTAL, TOTAL, USER_ID)
 VALUES ('5', '15', '25103', '5', '2');
@@ -43,7 +46,7 @@ INSERT INTO reviews(commentary, photo, rade)
 VALUES (null, null, '2');
 
 INSERT INTO products_review(product_id, review_id)
-VALUES (1,2);
+VALUES (1, 2);
 
 INSERT INTO response_to_review (massage, user_id)
 VALUES ('comment', 2);

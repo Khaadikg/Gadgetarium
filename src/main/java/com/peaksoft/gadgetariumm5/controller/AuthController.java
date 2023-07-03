@@ -1,9 +1,7 @@
 package com.peaksoft.gadgetariumm5.controller;
 
-import com.peaksoft.gadgetariumm5.config.jwt.JwtTokenUtil;
-import com.peaksoft.gadgetariumm5.dto.*;
-import com.peaksoft.gadgetariumm5.model.entity.User;
-import com.peaksoft.gadgetariumm5.repository.UserRepository;
+import com.peaksoft.gadgetariumm5.dto.UserRequest;
+import com.peaksoft.gadgetariumm5.dto.UserResponse;
 import com.peaksoft.gadgetariumm5.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,8 +27,8 @@ public class AuthController {
     private final LoginMapper loginMapper;
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("sign-up")
-    @Operation(summary = "Sign up", description = "User can register")
+
+    @PostMapping("/sign-up")
     public UserResponse signUp(@RequestBody UserRequest request) throws Exception {
         return service.registration(request);
     }

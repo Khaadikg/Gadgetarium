@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bucked {
+public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +27,12 @@ public class Bucked {
     @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name ="user_id")
     private User user;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH},mappedBy = "bucked")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "basket")
     private List<Product> products;
     @Column(name = "grand_total")
     private double grandTotal;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "bucked")
+    private Long grandTotal;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     private List<Order> orders;
 }

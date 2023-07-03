@@ -43,21 +43,21 @@ public class User implements UserDetails {
     private Role role;
     @CreatedDate
     private LocalDate createDate;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
-    @JoinColumn(name = "bucked_id")
-    private Bucked bucked;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
     @Transient
-    private Long buckedId;
-    @ManyToMany(cascade = CascadeType.ALL,mappedBy = "users")
+    private Long basketId;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Review> reviews;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ResponseToReview> responseToReviews;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority>authorities = new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         return authorities;
     }
