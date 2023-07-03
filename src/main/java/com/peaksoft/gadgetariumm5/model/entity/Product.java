@@ -17,15 +17,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int price;
+    private double price;
+    private int discount;
+    private int inStock;
     private int article;
     private File file;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "brand_id")
     private Brand brand;
     private String screen;
     private String color;
@@ -38,15 +42,17 @@ public class Product {
     private int simCard;
     private int warranty;
     private String processor;
-    private int weight;
+    private double weight;
     @Enumerated(EnumType.STRING)
     private WirelessInterface wirelessInterface;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Enumerated(EnumType.STRING)
     private BodyShape bodyShape;
-    @OneToMany
-    @JoinTable(name = "products_review",
+    @Enumerated(EnumType.STRING)
+    private SubCategory subCategory;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "products_reviews",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Review> reviews;
@@ -54,15 +60,12 @@ public class Product {
     @JoinTable(name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<SubCategory> categories;
+    private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST})
-    @JoinTable(name = "bucked_products",
-            joinColumns = @JoinColumn(name = "bucked_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Bucked bucked;
-    private int discount;
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "basket_id")
+    private Basket basket;
 
 
 }

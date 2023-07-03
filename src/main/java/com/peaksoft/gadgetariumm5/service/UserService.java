@@ -17,11 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
@@ -67,7 +65,7 @@ public class UserService {
         user.setAddress(String.valueOf(address));
         JSONArray roles = (JSONArray) json.get("authorities");
         String roleName = String.valueOf(roles.getJSONObject(0).get("authority"));
-        user.setRole(Role.valueOf(roleName.substring(5)));
+        user.setRole(Role.valueOf(roleName.replace("ROLE_", "")));
         user.setCreateDate(LocalDate.now());
         userRepository.save(user);
         return mapToGoogleResponse(user);

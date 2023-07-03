@@ -1,6 +1,5 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
-import com.peaksoft.gadgetariumm5.model.enums.Delivery;
 import com.peaksoft.gadgetariumm5.model.enums.Payment;
 import com.peaksoft.gadgetariumm5.model.enums.Status;
 import lombok.AllArgsConstructor;
@@ -29,7 +28,7 @@ public class Order {
     private LocalDateTime created;
     @UpdateTimestamp
     private LocalDateTime update;
-    @ManyToOne(cascade ={CascadeType.REFRESH,CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
     private User user;
     private Long sum;
@@ -38,9 +37,9 @@ public class Order {
     private Payment payment;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToMany(cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_details_id")
     private List<OrderDetails> details;
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
-    private Bucked bucked;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    private Basket basket;
 }
