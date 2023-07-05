@@ -3,7 +3,7 @@ package com.peaksoft.gadgetariumm5.service;
 import com.peaksoft.gadgetariumm5.dto.UserGoogleResponse;
 import com.peaksoft.gadgetariumm5.dto.UserRequest;
 import com.peaksoft.gadgetariumm5.dto.UserResponse;
-import com.peaksoft.gadgetariumm5.model.entity.Bucked;
+import com.peaksoft.gadgetariumm5.model.entity.Basket;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
 
@@ -29,7 +29,7 @@ public class UserService {
 
     public UserResponse registration(UserRequest request) throws Exception {
         User user = new User();
-        Bucked bucked = new Bucked();
+        Basket basket = new Basket();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPhoneNumber(request.getPhoneNumber());
@@ -42,9 +42,9 @@ public class UserService {
         }
         user.setRole(Role.USER);
         user.setCreateDate(LocalDate.now());
-        user.setBucked(bucked);
-        user.setBuckedId(bucked.getId());
-        bucked.setUser(user);
+        user.setBasket(basket);
+        user.setBasketId(basket.getId());
+        basket.setUser(user);
         userRepository.save(user);
         return mapToUserResponse(user);
     }

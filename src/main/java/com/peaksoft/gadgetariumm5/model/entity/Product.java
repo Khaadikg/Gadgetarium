@@ -1,10 +1,9 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.gadgetariumm5.model.enums.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.File;
@@ -17,24 +16,34 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double price;
+    @Transient
     private int discount;
+    @Transient
+    private double total;
+    @Transient
+    private int amount;
+    @Transient
+    private double grandTotal;
     private int inStock;
     private int article;
     private File file;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id")
+    @JsonIgnore
     private Brand brand;
     private String screen;
     private String color;
     private String rating;
     private String memory;
     @JoinColumn(name = "release_date")
+    @CreatedDate
     private LocalDate releaseDate;
     @Enumerated(EnumType.STRING)
     private OperatingSystem operatingSystem;
@@ -64,7 +73,10 @@ public class Product {
     private WaterResistance waterResistance;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "basket_id")
+    @JsonIgnore
     private Basket basket;
+    @Transient
+    private long basketId;
 
 
 }

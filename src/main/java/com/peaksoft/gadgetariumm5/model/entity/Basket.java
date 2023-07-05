@@ -1,15 +1,13 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "bucked")
+@Table(name = "baskets")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,12 +25,11 @@ public class Basket {
     @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name ="user_id")
     private User user;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "basket")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "basket")
+    @JsonIgnore
     private List<Product> products;
     @Column(name = "grand_total")
     private double grandTotal;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "bucked")
-    private Long grandTotal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     private List<Order> orders;
 }
