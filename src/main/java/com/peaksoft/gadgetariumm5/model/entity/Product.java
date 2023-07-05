@@ -2,6 +2,11 @@ package com.peaksoft.gadgetariumm5.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.gadgetariumm5.model.enums.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -42,8 +47,8 @@ public class Product {
     private String color;
     private String rating;
     private String memory;
-    @JoinColumn(name = "release_date")
     @CreatedDate
+    @JoinColumn(name = "release_date")
     private LocalDate releaseDate;
     @Enumerated(EnumType.STRING)
     private OperatingSystem operatingSystem;
@@ -75,6 +80,9 @@ public class Product {
     @JoinColumn(name = "basket_id")
     @JsonIgnore
     private Basket basket;
+    private String image;
+    private int ram;
+    private String video;
     @Transient
     private long basketId;
 
