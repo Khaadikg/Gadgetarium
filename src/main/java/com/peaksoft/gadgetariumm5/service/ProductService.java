@@ -71,7 +71,7 @@ public class ProductService {
         product.setName(productRequest.getName());
         product.setSubCategory(productRequest.getSubCategory());
         product.setWarranty(productRequest.getWarranty());
-        product.setReleaseDate(LocalDate.now());
+        product.setReleaseDate(LocalDate.now() );
         return product;
     }
 
