@@ -70,7 +70,7 @@ public class Product {
     private Basket basket;
     private String image;
     private int ram;
-    private String video;
+    private String video ;
 
 
 }
