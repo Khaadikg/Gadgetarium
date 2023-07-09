@@ -71,6 +71,10 @@ public class Product {
     private String image;
     private int ram;
     private String video;
+    @Enumerated(EnumType.STRING)
+    private Sort sort;
+    @Enumerated(EnumType.STRING)
+    private ByStock byStock;
 
 
 }

@@ -26,5 +26,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "or upper(product.waterResistance)like concat('%',:text,'%')" +
             "or upper(product.subCategory) like upper(concat('%',:text,'%') )")
     List<Product> searchAndPagination(@Param("text") String text, Pageable pageable);
+    @Query("select p from Product p where upper(p.sort) like ('NEW') and like ('BY_STOCK')" +
+            " and like ('FEATURED')" +
+            "and like ('BY_PRICE_INCREASE')" +
+            " and like ('BY_DECREASING_PRICE')")
+    List<Product> sorting(@Param("text") String text);
+    @Query("select product from Product product where upper(product.byStock) ='ДО_50' and sum(product.price)" +
+            "< avg (product.price) or upper(product.byStock)='СВЫШЕ_50' and sum (product.price)> avg(product.price)")
+    List<Product>searchStock(@Param("text")String text);
+
 }
 

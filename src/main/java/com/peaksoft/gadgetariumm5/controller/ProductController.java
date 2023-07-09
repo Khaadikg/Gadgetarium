@@ -50,5 +50,8 @@ public class ProductController {
         return productService.searchAndPagination(text, page, size);
 
     }
-
+    @GetMapping("/searchSort")
+    public ProductResponseVIew getSort(@RequestParam(name = "text",required = false) String text){
+        return productService.searchTypes(text);
+    }
 }

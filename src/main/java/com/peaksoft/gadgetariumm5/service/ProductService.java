@@ -6,6 +6,7 @@ import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
 import com.peaksoft.gadgetariumm5.model.entity.Product;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -99,7 +100,9 @@ public class ProductService {
                 .gender(product.getGender())
                 .waterResistance(product.getWaterResistance())
                 .wirelessInterface(product.getWirelessInterface())
-                .discount(product.getDiscount()).build();
+                .discount(product.getDiscount())
+                .sort(product.getSort())
+                .build();
 
     }
 
@@ -125,4 +128,14 @@ public class ProductService {
         String name = text == null ? "" : text;
         return productRepository.searchAndPagination(name.toUpperCase(), pageable);
     }
+    private List<Product> searchSort(String text){
+        String name = text ==null? "" : text;
+        return  productRepository.sorting(name.toUpperCase());
+    }
+    public ProductResponseVIew searchTypes(String text){
+        ProductResponseVIew productResponseVIew = new ProductResponseVIew();
+        productResponseVIew.setProductResponse(view(searchSort(text)));
+        return productResponseVIew;
+    }
+
 }
