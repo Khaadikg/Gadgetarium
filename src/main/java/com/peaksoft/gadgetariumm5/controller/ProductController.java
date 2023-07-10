@@ -54,4 +54,8 @@ public class ProductController {
     public ProductResponseVIew getSort(@RequestParam(name = "text",required = false) String text){
         return productService.searchTypes(text);
     }
+    @GetMapping("/searchStock")
+    public ProductResponseVIew getStock(@RequestParam(name = "text",required = false) String text){
+        return productService.searchStock(text);
+    }
 }

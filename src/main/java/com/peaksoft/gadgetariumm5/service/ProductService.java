@@ -137,5 +137,14 @@ public class ProductService {
         productResponseVIew.setProductResponse(view(searchSort(text)));
         return productResponseVIew;
     }
+    private List<Product>searchStock1(String text){
+        String name = text ==null? "" : text;
+        return productRepository.searchStock(name.toUpperCase());
+    }
+    public ProductResponseVIew searchStock(String text){
+        ProductResponseVIew vIew = new ProductResponseVIew();
+        vIew.setProductResponse(view(searchStock1(text)));
+        return vIew;
+    }
 
 }
