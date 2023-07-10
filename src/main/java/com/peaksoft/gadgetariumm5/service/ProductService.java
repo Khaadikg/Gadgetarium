@@ -79,7 +79,7 @@ public class ProductService {
         return ProductResponse.builder()
 
                 .brand(product.getBrand())
-                .basket(product.getBasket())
+                //.basket(product.getBasket())
                 .id(product.getId())
                 .name(product.getName())
                 .article(product.getArticle())

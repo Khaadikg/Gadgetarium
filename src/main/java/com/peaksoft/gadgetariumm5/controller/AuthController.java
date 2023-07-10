@@ -42,11 +42,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword());
-
-        System.out.println(token);
-        //authenticationManager.authenticate(token);
         User user = userRepository.findByEmail(token.getName()).get();
         return loginMapper.loginView(jwtTokenUtil.generateToken(user), "Successful", user);
     }
-
 }

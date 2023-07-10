@@ -9,10 +9,10 @@ VALUES ('APPLE'),
        ('HUAWEI'),
        ('XIAOMI');
 
-INSERT INTO products(article, body_shape,sub_category, color, discount, file, gender,in_stock, memory, name, operating_system, price,
+INSERT INTO products(ram,article, body_shape,sub_category, color, discount, file, gender,in_stock, memory, name, operating_system, price,
                      processor, rating, release_date, screen, sim_card, warranty, water_resistance, weight,
                      wireless_interface, brand_id)
-VALUES ('0214', 'OVAL','WATCHBANDS', 'black', '15', null, 'FEMALE','10', '125Gb', 'iphone 12', 'IOS', '95000', 'A15 Bionic', '5',
+VALUES ('4','0214', 'OVAL','WATCHBANDS', 'black', '15', null, 'FEMALE','10', '125Gb', 'iphone 12', 'IOS', '95000', 'A15 Bionic', '5',
         '2022.12.26', '53 (2340*1080) IPS', '1', '12', null, '173', null, 1);
 
 -- INSERT INTO brands_products(brand_id, products_id)

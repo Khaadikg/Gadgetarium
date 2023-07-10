@@ -18,18 +18,25 @@ public class Basket {
     private Long id;
     @Column(name = "amount")
     private int amount;
+    @Column(name = "product_amount")
+    private  int productAmount;
     @Column(name = "discount")
     private double discount;
     @Column(name = "total")
     private double total;
-    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name ="user_id")
-    private User user;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "basket")
-    @JsonIgnore
-    private List<Product> products;
     @Column(name = "grand_total")
     private double grandTotal;
+    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name ="user_id")
+    @JsonIgnore
+    private User user;
+    @ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "basketList")
+    @JsonIgnore
+    private List<Product> productList;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "basket")
+    @JsonIgnore
+    private List<ProductAmount> productAmountList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     private List<Order> orders;
+
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.File;
@@ -28,14 +27,7 @@ public class Product {
     private Long id;
     private String name;
     private double price;
-    @Transient
     private int discount;
-    @Transient
-    private double total;
-    @Transient
-    private int amount;
-    @Transient
-    private double grandTotal;
     private int inStock;
     private int article;
     private File file;
@@ -76,10 +68,16 @@ public class Product {
     private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "basket_id")
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "products_baskets",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "basket_id"))
     @JsonIgnore
-    private Basket basket;
+    private List<Basket> basketList;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "ProductAmount_id")
+    @JsonIgnore
+    private ProductAmount productAmount;
     private String image;
     private int ram;
     private String video;

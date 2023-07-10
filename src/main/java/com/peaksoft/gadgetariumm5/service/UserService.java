@@ -1,5 +1,6 @@
 package com.peaksoft.gadgetariumm5.service;
 
+import com.peaksoft.gadgetariumm5.config.jwt.JwtTokenUtil;
 import com.peaksoft.gadgetariumm5.dto.UserGoogleResponse;
 import com.peaksoft.gadgetariumm5.dto.UserRequest;
 import com.peaksoft.gadgetariumm5.dto.UserResponse;
@@ -27,6 +28,8 @@ public class UserService {
     private BasketRepository basketRepository;
     private final BCryptPasswordEncoder encoder;
 
+    private final JwtTokenUtil util;
+
     public UserResponse registration(UserRequest request) throws Exception {
         User user = new User();
         Basket basket = new Basket();
@@ -46,6 +49,7 @@ public class UserService {
         user.setBasketId(basket.getId());
         basket.setUser(user);
         userRepository.save(user);
+        basketRepository.save(basket);
         return mapToUserResponse(user);
     }
 
@@ -77,10 +81,13 @@ public class UserService {
         user.setCreateDate(LocalDate.now());
 
         userRepository.save(user);
-        return mapToGoogleResponse(user);
+
+        String token = util.generateToken(user);
+
+        return mapToGoogleResponse(user,token);
     }
 
-    public UserGoogleResponse mapToGoogleResponse(User user) {
+    public UserGoogleResponse mapToGoogleResponse(User user,String token) {
         return UserGoogleResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -88,6 +95,7 @@ public class UserService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .address(user.getAddress())
+                .token(token)
                 .create(LocalDate.now()).build();
     }
 }

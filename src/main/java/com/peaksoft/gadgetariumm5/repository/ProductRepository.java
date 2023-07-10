@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -26,5 +28,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "or upper(product.waterResistance)like concat('%',:text,'%')" +
             "or upper(product.subCategory) like upper(concat('%',:text,'%') )")
     List<Product> searchAndPagination(@Param("text") String text, Pageable pageable);
+
+
+    default Product getById(Long prd){
+        Optional<Product> optional = findById(prd);
+        if (optional.isPresent())
+            return optional.get();
+        else
+            throw new NotFoundException("not fouind by id: "+prd);
+    }
 }
 
