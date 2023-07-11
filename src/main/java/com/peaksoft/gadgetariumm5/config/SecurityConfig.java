@@ -56,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+
     }
 
 }
