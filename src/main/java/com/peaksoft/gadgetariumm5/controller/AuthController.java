@@ -7,6 +7,7 @@ import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import com.peaksoft.gadgetariumm5.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
 
-    @PostMapping("/sign-up")
+    @PostMapping("sign-up")
     @Operation(summary = "Sign up",description = "User can register")
     public UserResponse signUp(@RequestBody UserRequest request) throws Exception {
         return service.registration(request);
@@ -34,10 +35,8 @@ public class AuthController {
     @PostMapping("sign-in")
     @Operation(summary = "Sing in",description = "User can Sign in")
     public LoginResponse signIn(@RequestBody LoginRequest loginRequest){
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword());
-        authenticationManager.authenticate(token);
-        User user = userRepository.findByEmail(token.getName()).get();
+        User user = userRepository.findByEmail(loginRequest.getEmail()).get();
+        System.out.println(loginRequest.getEmail());
         return loginMapper.loginView(jwtTokenUtil.generateToken(user),"Successful",user);
     }
 
