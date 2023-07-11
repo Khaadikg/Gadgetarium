@@ -49,7 +49,6 @@ public class UserService {
         user.setBasketId(basket.getId());
         basket.setUser(user);
         userRepository.save(user);
-        basketRepository.save(basket);
         return mapToUserResponse(user);
     }
 
