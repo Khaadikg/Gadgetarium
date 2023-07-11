@@ -23,26 +23,11 @@ import java.security.Principal;
 @Tag(name = "Auth Api")
 public class AuthController {
     private final UserService service;
-    private final JwtTokenUtil jwtTokenUtil;
-    private final UserRepository userRepository;
-    private final LoginMapper loginMapper;
-    private final AuthenticationManager authenticationManager;
-
 
     @PostMapping("/sign-up")
     public UserResponse signUp(@RequestBody UserRequest request) throws Exception {
         return service.registration(request);
     }
 
-    @PostMapping("/s")
-    @Operation(summary = "Sing in", description = "User can Sign in")
-    public LoginResponse signIn(@RequestBody LoginRequest loginRequest) {
 
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword());
-        User user = userRepository.findByEmail(token.getName()).get();
-        return loginMapper.loginView(jwtTokenUtil.generateToken(user), "Successful", user);
-    }
 }
