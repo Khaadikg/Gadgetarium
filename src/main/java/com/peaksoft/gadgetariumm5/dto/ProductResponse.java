@@ -40,7 +40,7 @@ public class ProductResponse {
     private int discount;
     private File file;
     private Sort sort;
-
+    private ByStock stock;
 }
 
 

@@ -3,6 +3,7 @@ package com.peaksoft.gadgetariumm5.controller;
 import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
+import com.peaksoft.gadgetariumm5.model.entity.Product;
 import com.peaksoft.gadgetariumm5.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -50,12 +51,14 @@ public class ProductController {
         return productService.searchAndPagination(text, page, size);
 
     }
+
     @GetMapping("/searchSort")
-    public ProductResponseVIew getSort(@RequestParam(name = "text",required = false) String text){
+    public ProductResponseVIew getSort(@RequestParam(name = "text", required = false) String text) {
         return productService.searchTypes(text);
     }
+
     @GetMapping("/searchStock")
-    public ProductResponseVIew getStock(@RequestParam(name = "text",required = false) String text){
+    public ProductResponseVIew getStock(@RequestParam(name = "text", required = false) String text) {
         return productService.searchStock(text);
     }
 }

@@ -72,7 +72,7 @@ public class ProductService {
         product.setName(productRequest.getName());
         product.setSubCategory(productRequest.getSubCategory());
         product.setWarranty(productRequest.getWarranty());
-        product.setReleaseDate(LocalDate.now() );
+        product.setReleaseDate(LocalDate.now());
         return product;
     }
 
@@ -102,6 +102,7 @@ public class ProductService {
                 .wirelessInterface(product.getWirelessInterface())
                 .discount(product.getDiscount())
                 .sort(product.getSort())
+                .stock(product.getByStock())
                 .build();
 
     }
@@ -128,23 +129,26 @@ public class ProductService {
         String name = text == null ? "" : text;
         return productRepository.searchAndPagination(name.toUpperCase(), pageable);
     }
-    private List<Product> searchSort(String text){
-        String name = text ==null? "" : text;
-        return  productRepository.sorting(name.toUpperCase());
+
+    private List<Product> searchSort(String text) {
+        String name = text == null ? "" : text;
+        return productRepository.sorting(name.toUpperCase());
     }
-    public ProductResponseVIew searchTypes(String text){
+
+    public ProductResponseVIew searchTypes(String text) {
         ProductResponseVIew productResponseVIew = new ProductResponseVIew();
         productResponseVIew.setProductResponse(view(searchSort(text)));
         return productResponseVIew;
     }
-    private List<Product>searchStock1(String text){
-        String name = text ==null? "" : text;
+
+    private List<Product> searchStock1(String text) {
+        String name = text == null ? "" : text;
         return productRepository.searchStock(name.toUpperCase());
     }
-    public ProductResponseVIew searchStock(String text){
+
+    public ProductResponseVIew searchStock(String text) {
         ProductResponseVIew vIew = new ProductResponseVIew();
         vIew.setProductResponse(view(searchStock1(text)));
         return vIew;
     }
-
 }
