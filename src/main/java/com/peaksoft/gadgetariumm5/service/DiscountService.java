@@ -2,11 +2,14 @@ package com.peaksoft.gadgetariumm5.service;
 
 import com.peaksoft.gadgetariumm5.dto.DiscountRequest;
 import com.peaksoft.gadgetariumm5.dto.DiscountResponse;
+import com.peaksoft.gadgetariumm5.dto.SimpleResponse;
 import com.peaksoft.gadgetariumm5.model.entity.Discount;
 import com.peaksoft.gadgetariumm5.repository.DiscountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +41,23 @@ public class DiscountService {
     public DiscountResponse getById(Long id){
         Discount discount = discountRepository.findById(id).get();
         return mapToResponse(discount);
+    }
+    public SimpleResponse delete(Long id) {
+        SimpleResponse discountDeleteResponse = new SimpleResponse();
+        Boolean exists1 = discountRepository.existsById(id);
+        Discount discount = new Discount();
+        if (exists1) {
+            discount = discountRepository.findById(id).get();
+        }
+        if (discount.getId() == id && LocalDate.now().isAfter(discount.getDateOfFinish())) {
+            discountRepository.delete(discount);
+            discountDeleteResponse.setHttpStatus(HttpStatus.OK);
+            discountDeleteResponse.setMessage("the discount with this id: " + discount.getId() + " was deleted");
+        } else {
+            discountDeleteResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+            discountDeleteResponse.setMessage("the discount's id is " + discount.getId());
+        }
+        return discountDeleteResponse;
     }
 
     public Discount mapToEntity(DiscountRequest request){
