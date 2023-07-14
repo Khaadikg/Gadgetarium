@@ -48,7 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/jwt/**").permitAll()
+                .antMatchers("/email/get/**").permitAll()
+
                 .antMatchers("/products/search").permitAll()
+                .antMatchers("/orders/getAll").permitAll()
+                .antMatchers("/orders/add").permitAll()
+                .antMatchers("/orders/payment").permitAll()
+                .antMatchers("/orders/orderOverview").permitAll()
+                .antMatchers("/orders/finish").permitAll()
                 .anyRequest().authenticated()
                 .and().oauth2Login().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS).

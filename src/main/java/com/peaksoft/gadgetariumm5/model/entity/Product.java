@@ -1,5 +1,6 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.gadgetariumm5.model.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,19 +23,25 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.PERSIST})
+    @JoinColumn(name = "order_id")
+    private Order order;
     private String name;
     private double price;
     private int discount;
     private int inStock;
     private int article;
+    private String photo;
     private File file;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id")
+    @JsonIgnore
     private Brand brand;
     private String screen;
     private String color;
     private String rating;
     private String memory;
+    private String ram;
     @JoinColumn(name = "release_date")
     private LocalDate releaseDate;
     @Enumerated(EnumType.STRING)

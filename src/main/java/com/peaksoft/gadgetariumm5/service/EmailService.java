@@ -1,6 +1,8 @@
 package com.peaksoft.gadgetariumm5.service;
 
+import com.peaksoft.gadgetariumm5.model.entity.Order;
 import com.peaksoft.gadgetariumm5.model.entity.User;
+import com.peaksoft.gadgetariumm5.repository.OrderRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,7 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import javax.mail.internet.MimeMessage;
+import java.util.*;
 
 @Service
 public class EmailService {
@@ -16,11 +19,31 @@ public class EmailService {
     private JavaMailSender emailSender;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private OrderRepository orderRepository;
     private final BCryptPasswordEncoder encoder;
 
     {
         this.encoder = new BCryptPasswordEncoder();
     }
+    public void sendOrderMassage(String email, Long orderId){
+           User user=repository.findByEmail(email).get();
+        for (int i = 0; i < user.getOrders().size(); i++) {
+            Order order=user.getOrders().get(i);
+            if (Objects.equals(orderId, order.getId())) {
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(email);
+                mailMessage.setFrom("tairovasan11@gmail.com");
+                mailMessage.setSubject("Good Order");
+                String massage = "Номер заказа : " + order.getApplicationNumber() +
+                        "\n Дата заказа : " + order.getCreated() +
+                        "\n Статус заказа : " + order.getStatus();
+                mailMessage.setText(massage);
+                emailSender.send((mailMessage));
+            }
+        }
+
+            }
 
     public void sendSimpleMessage(int stringPinCode, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -30,13 +53,11 @@ public class EmailService {
         message.setSubject("Password change");
         message.setText(pinCode);
         emailSender.send(message);
-
     }
 
     public int pinCode() {
         Random random = new Random();
-        int pinCode = random.nextInt(1000, 9999);
-        return pinCode;
+        return random.nextInt(1000, 9999);
     }
 
     public String checkPinCode(int pinCheck, String email, String password, String confirm) {
