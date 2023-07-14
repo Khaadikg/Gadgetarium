@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.File;
@@ -31,7 +32,6 @@ public class Product {
     private int discount;
     private int inStock;
     private int article;
-    private String photo;
     private File file;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id")
@@ -41,7 +41,7 @@ public class Product {
     private String color;
     private String rating;
     private String memory;
-    private String ram;
+    @CreatedDate
     @JoinColumn(name = "release_date")
     private LocalDate releaseDate;
     @Enumerated(EnumType.STRING)
@@ -73,6 +73,9 @@ public class Product {
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "basket_id")
     private Basket basket;
+    private String image;
+    private int ram;
+    private String video;
 
 
 }
