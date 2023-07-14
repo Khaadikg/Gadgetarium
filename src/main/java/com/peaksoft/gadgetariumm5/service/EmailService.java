@@ -19,21 +19,16 @@ public class EmailService {
     private JavaMailSender emailSender;
     @Autowired
     private UserRepository repository;
-    @Autowired
-    private OrderRepository orderRepository;
-    private final BCryptPasswordEncoder encoder;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    {
-        this.encoder = new BCryptPasswordEncoder();
-    }
-    public void sendOrderMassage(String email, Long orderId){
-           User user=repository.findByEmail(email).get();
+    public void sendOrderMassage(String email, Long orderId) {
+        User user = repository.findByEmail(email).get();
         for (int i = 0; i < user.getOrders().size(); i++) {
-            Order order=user.getOrders().get(i);
+            Order order = user.getOrders().get(i);
             if (Objects.equals(orderId, order.getId())) {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
                 mailMessage.setTo(email);
-                mailMessage.setFrom("tairovasan11@gmail.com");
+                mailMessage.setFrom("gadgetarium_application@gmail.com");
                 mailMessage.setSubject("Good Order");
                 String massage = "Номер заказа : " + order.getApplicationNumber() +
                         "\n Дата заказа : " + order.getCreated() +
@@ -42,8 +37,7 @@ public class EmailService {
                 emailSender.send((mailMessage));
             }
         }
-
-            }
+    }
 
     public void sendSimpleMessage(int stringPinCode, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -62,6 +56,7 @@ public class EmailService {
 
     public String checkPinCode(int pinCheck, String email, String password, String confirm) {
         if (!confirm.equals(password)) {
+            // TODO: 14.07.2023 You have to throw modification exception 
             return "NOT EQUALS";
         } else {
             User user = repository.findByEmail(email).get();
