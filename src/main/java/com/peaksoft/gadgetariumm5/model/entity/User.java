@@ -49,6 +49,8 @@ public class User implements UserDetails {
     private Long basketId;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Review> reviews;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<Card>cards;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ResponseToReview> responseToReviews;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

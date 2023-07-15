@@ -2,7 +2,6 @@ package com.peaksoft.gadgetariumm5.service;
 
 import com.peaksoft.gadgetariumm5.model.entity.Order;
 import com.peaksoft.gadgetariumm5.model.entity.User;
-import com.peaksoft.gadgetariumm5.repository.OrderRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,8 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
-import java.util.*;
+import java.util.Random;
 
 @Service
 public class EmailService {
@@ -19,17 +17,19 @@ public class EmailService {
     private JavaMailSender emailSender;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private  OrderService orderService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public void sendOrderMassage(String email, Long orderId) {
-        User user = repository.findByEmail(email).get();
+    public void sendOrderMassage(Long orderId) {
+        User user =orderService.getAuthUser();
         for (int i = 0; i < user.getOrders().size(); i++) {
             Order order = user.getOrders().get(i);
-            if (Objects.equals(orderId, order.getId())) {
+            if (orderId.equals(order.getId())) {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
-                mailMessage.setTo(email);
+                mailMessage.setTo(order.getEmail());
                 mailMessage.setFrom("gadgetarium_application@gmail.com");
-                mailMessage.setSubject("Good Order");
+                mailMessage.setSubject("Order information!");
                 String massage = "Номер заказа : " + order.getApplicationNumber() +
                         "\n Дата заказа : " + order.getCreated() +
                         "\n Статус заказа : " + order.getStatus();
