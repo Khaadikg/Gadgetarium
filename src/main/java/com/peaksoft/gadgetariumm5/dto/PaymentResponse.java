@@ -9,9 +9,9 @@ import lombok.Setter;
 @Builder
 public class PaymentResponse {
     private Long id;
-    private  String payment;
+    private String payment;
     private String cardNumber;
-    private String  month;
-    private  String  year;
+    private String month;
+    private String year;
 
 }

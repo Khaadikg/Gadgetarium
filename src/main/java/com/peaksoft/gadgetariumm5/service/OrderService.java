@@ -12,6 +12,7 @@ import com.peaksoft.gadgetariumm5.model.enums.Role;
 import com.peaksoft.gadgetariumm5.repository.CardRepository;
 import com.peaksoft.gadgetariumm5.repository.OrderRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
+import com.sun.mail.imap.protocol.INTERNALDATE;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +28,9 @@ public class OrderService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
-    private final MapToResponse mapToOrder;
+
+    private final MapToResponse mapToOrder = new MapToResponse();
+
 
     public List<OrderResponse> getAllOrders() {
         User user = getAuthUser();
@@ -50,7 +53,7 @@ public class OrderService {
         User user = getAuthUser();
         List<Order> orderList = new ArrayList<>();
         Order order = mapToOrder.mapToEntity(orderRequest);
-        if (order.getDelivery().equals(Delivery.DELIVERY)) {
+        if (order.getDelivery().equals(Delivery.COURIER_DELIVERY)) {
             order.setAddress(orderRequest.getAddress());
         } else {
             order.setAddress("");
@@ -58,8 +61,9 @@ public class OrderService {
         order.setUser(user);
         orderList.add(order);
         user.setOrders(orderList);
-        userRepository.save(user);
+
         orderRepository.save(order);
+        userRepository.save(user);
         return mapToOrder.mapToOrderResponse(order);
 
     }
@@ -67,9 +71,14 @@ public class OrderService {
     public PaymentResponse paymentMethod(Long orderId, PaymentRequest paymentRequest) {
         User user = getAuthUser();
         Order order = findByOrderId(orderId);
+
         if (!user.getOrders().contains(order)) {
             throw new NotFoundException("You dont have such order!");
         }
+
+        PaymentResponse paymentResponse;
+
+        List<Card> cards = new ArrayList<>();
         Card card = new Card();
         if (paymentRequest.getPaymentMethod()
                 .equalsIgnoreCase(String.valueOf(Payment.BY_CARD_ONLINE))) {
@@ -80,36 +89,44 @@ public class OrderService {
                     .cvc(passwordEncoder.encode(paymentRequest.getCvc()))
                     .build();
             card.setUser(user);
-            List<Card> cards = new ArrayList<>();
             cards.add(card);
             user.setCards(cards);
-            order.setPayment(Payment.BY_CARD_ONLINE);
+            order.setPayment(Payment.valueOf((paymentRequest.getPaymentMethod())));
+            userRepository.save(user);
             orderRepository.save(order);
-            return mapToOrder.mapToCardResponse(card, String.valueOf(Payment.BY_CARD_ONLINE));
+            paymentResponse = mapToOrder.mapToCardResponse(card, String.valueOf(Payment.BY_CARD_ONLINE));
+
         } else if (paymentRequest.getPaymentMethod()
                 .equalsIgnoreCase(String.valueOf(Payment.BY_CARD_UPON_RECEIPT))) {
-            return mapToOrder.mapToCardResponse(card, String.valueOf(Payment.BY_CARD_UPON_RECEIPT));
-        }
-        return mapToOrder.mapToCardResponse(card, String.valueOf(Payment.IN_CASH_UPON_RECEIPT));
-    }
+            order.setPayment(Payment.valueOf((paymentRequest.getPaymentMethod())));
+            orderRepository.save(order);
+            paymentResponse = mapToOrder.mapToCardResponse(card, String.valueOf(order.getPayment()));
+        } else {
 
+            order.setPayment(Payment.valueOf(paymentRequest.getPaymentMethod()));
+
+            orderRepository.saveAndFlush(order);
+            paymentResponse = mapToOrder.mapToCardResponse(card, String.valueOf(order.getPayment()));
+        }
+        return paymentResponse;
+    }
 
     public OrderOverviewResponse orderOverview(Long orderId) {
         User user = getAuthUser();
         Order order = findByOrderId(orderId);
         List<Order> orderList = new ArrayList<>();
-        order.setTotal(user.getBasket().getGrandTotal());
+        // order.setTotal(user.getBasket().getGrandTotal());
         orderList.add(order);
         user.setOrders(orderList);
         order.setUser(user);
-        orderRepository.save(order);
+        orderRepository.saveAndFlush(order);
         return mapToOrder.mapToOrderOverview(order);
 
     }
 
     public OrderFinishResponse orderFinishResponse(Long orderId) {
         User user = getAuthUser();
-        Order order=null;
+        Order order = null;
         for (int i = 0; i < user.getOrders().size(); i++) {
             if (user.getOrders().get(i).getId().equals(orderId)) {
                 order = user.getOrders().get(i);
@@ -123,7 +140,7 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    private Order findByOrderId(Long orderId) {
+    public Order findByOrderId(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new NotFoundException("There is no order by id = " + orderId));
     }
@@ -131,7 +148,7 @@ public class OrderService {
     public User getAuthUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user == null) {
-            throw new NotFoundException("Your not signed in!");
+            throw new NotFoundException("You didn't  sign in!");
         }
         return user;
     }

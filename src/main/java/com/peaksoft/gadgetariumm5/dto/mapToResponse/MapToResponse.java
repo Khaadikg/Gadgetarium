@@ -5,15 +5,16 @@ import com.peaksoft.gadgetariumm5.model.entity.Card;
 import com.peaksoft.gadgetariumm5.model.entity.Order;
 import com.peaksoft.gadgetariumm5.model.enums.Delivery;
 import com.peaksoft.gadgetariumm5.model.enums.Status;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Random;
 
+@RequiredArgsConstructor
 public class MapToResponse {
 
     public Order mapToEntity(OrderRequest orderRequest) {
         Random random = new Random();
-
         return Order.builder()
                 .delivery(Delivery.valueOf(orderRequest.getDeliveryOptions()))
                 .fistName(orderRequest.getFirstName())
@@ -23,8 +24,6 @@ public class MapToResponse {
                 .status(Status.PENDING)
                 .created(LocalDate.now().atStartOfDay())
                 .applicationNumber(String.valueOf(random.nextInt(1000000, 9000000)))
-
-
                 .build();
     }
 
@@ -34,8 +33,10 @@ public class MapToResponse {
                 .delivery(order.getDelivery())
                 .fistName(order.getFistName())
                 .lastName(order.getLastName())
-                .email(order.getEmail()).
-                address(order.getAddress())
+                .email(order.getEmail())
+                .created(order.getCreated())
+                .update(order.getUpdate())
+                .address(order.getAddress())
                 .build();
     }
 

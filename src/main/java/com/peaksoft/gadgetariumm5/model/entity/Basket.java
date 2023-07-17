@@ -24,12 +24,10 @@ public class Basket {
     private int discount;
     @Column(name = "total")
     private int total;
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,CascadeType.REMOVE})
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "basket")
     private List<Product> products;
     private Long grandTotal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
-    private List<Order> orders;
 }

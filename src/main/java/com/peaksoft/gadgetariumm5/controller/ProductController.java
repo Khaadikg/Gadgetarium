@@ -4,7 +4,10 @@ import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
 import com.peaksoft.gadgetariumm5.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,8 +15,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
+@Tag(name = "Products.")
 public class ProductController {
     private final ProductService productService;
+
 
     @GetMapping
     public List<ProductResponse> getAllProducts() {
@@ -43,6 +48,8 @@ public class ProductController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search product.")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ProductResponseVIew getProducts(@RequestParam(name = "text", required = false)
                                            String text,
                                            @RequestParam int page,

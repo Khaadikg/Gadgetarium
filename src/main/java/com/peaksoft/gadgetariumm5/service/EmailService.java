@@ -18,25 +18,20 @@ public class EmailService {
     @Autowired
     private UserRepository repository;
     @Autowired
-    private  OrderService orderService;
+    private OrderService orderService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public void sendOrderMassage(Long orderId) {
-        User user =orderService.getAuthUser();
-        for (int i = 0; i < user.getOrders().size(); i++) {
-            Order order = user.getOrders().get(i);
-            if (orderId.equals(order.getId())) {
-                SimpleMailMessage mailMessage = new SimpleMailMessage();
-                mailMessage.setTo(order.getEmail());
-                mailMessage.setFrom("gadgetarium_application@gmail.com");
-                mailMessage.setSubject("Order information!");
-                String massage = "Номер заказа : " + order.getApplicationNumber() +
-                        "\n Дата заказа : " + order.getCreated() +
-                        "\n Статус заказа : " + order.getStatus();
-                mailMessage.setText(massage);
-                emailSender.send((mailMessage));
-            }
-        }
+        Order order = orderService.findByOrderId(orderId);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(order.getEmail());
+        mailMessage.setFrom("gadgetarium_application@gmail.com");
+        mailMessage.setSubject("Order information!");
+        String massage = "Номер заказа : " + order.getApplicationNumber() +
+                "\n Дата заказа : " + order.getCreated() +
+                "\n Статус заказа : " + order.getStatus();
+        mailMessage.setText(massage);
+        emailSender.send((mailMessage));
     }
 
     public void sendSimpleMessage(int stringPinCode, String email) {

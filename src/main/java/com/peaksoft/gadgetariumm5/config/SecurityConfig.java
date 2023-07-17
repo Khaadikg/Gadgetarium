@@ -48,10 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/jwt/**").permitAll()
-                .antMatchers("/products/search").permitAll()
                 .anyRequest().authenticated()
                 .and().oauth2Login().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS).
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
