@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name ="products")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class Product {
     private Order order;
     private String name;
     private double price;
-    private int discount;
+//    private int discount;
     private int inStock;
     private int article;
     private File file;
@@ -76,6 +76,11 @@ public class Product {
     private String image;
     private int ram;
     private String video;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+    @Transient
+    private Long discountId;
 
 
 }
