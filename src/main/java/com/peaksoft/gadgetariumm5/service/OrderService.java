@@ -9,10 +9,8 @@ import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Delivery;
 import com.peaksoft.gadgetariumm5.model.enums.Payment;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
-import com.peaksoft.gadgetariumm5.repository.CardRepository;
 import com.peaksoft.gadgetariumm5.repository.OrderRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
-import com.sun.mail.imap.protocol.INTERNALDATE;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,9 +24,7 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final CardRepository cardRepository;
     private final UserRepository userRepository;
-
     private final MapToResponse mapToOrder = new MapToResponse();
 
 
