@@ -81,6 +81,11 @@ public class Product {
     private String image;
     private int ram;
     private String video;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+    @Transient
+    private Long discountId;
     @Transient
     private long basketId;
 

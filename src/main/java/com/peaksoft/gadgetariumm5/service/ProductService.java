@@ -4,6 +4,7 @@ import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
 import com.peaksoft.gadgetariumm5.model.entity.Product;
+import com.peaksoft.gadgetariumm5.repository.DiscountRepository;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -99,7 +100,7 @@ public class ProductService {
                 .gender(product.getGender())
                 .waterResistance(product.getWaterResistance())
                 .wirelessInterface(product.getWirelessInterface())
-                .discount(product.getDiscount()).build();
+                .discount(product.getDiscount().getPercentage()).build();
 
     }
 
