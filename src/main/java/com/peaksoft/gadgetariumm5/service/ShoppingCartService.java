@@ -10,7 +10,6 @@ import com.peaksoft.gadgetariumm5.repository.ProductAmountRepository;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,14 +20,12 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartService {
-    @Autowired
-    private BasketRepository basketRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private ProductAmountRepository productAmountRepository;
+    private final BasketRepository basketRepository;
+
+    private final UserRepository userRepository;
+
+    private final ProductRepository productRepository;
+    private final ProductAmountRepository productAmountRepository;
 
     public BasketResponse getAllBasket(String email) {
         User user = userRepository.findByEmail(email).get();
@@ -69,83 +66,73 @@ public class ShoppingCartService {
     }
 
     public void deleteProduct(Long id, String email) {
-        User user = userRepository.getUserByUsername(email);
+        User user = userRepository.findByEmail(email).get();
+        Product product = productRepository.findById(id).get();
         for (int i = 0; i < user.getBasket().getProductList().size(); i++) {
             if (Objects.equals(id, user.getBasket().getProductList().get(i).getId())) {
                 user.getBasket().getProductList().get(i).setBasketList(null);
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
-
+                remove(product.getId(),user);
             } else {
                 System.out.println("not");
             }
         }
     }
-    public void remove(Long id, User user){
-        for (int i = 0; i < user.getBasket().getProductAmountList().size(); i++) {
-            if (user.getBasket().getProductAmountList().get(i).getId() == id){
-                user.getBasket().getProductAmountList().remove(user.getBasket().getProductAmountList().get(i));
+
+    public void remove(Long id, User user) {
+        List<ProductAmount> products = user.getBasket().getProductAmountList();
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProductId().equals(id)) {
+                Product product = productRepository.findById(id).get();
+                product.setProductAmountList(null);
+                products.get(i).setProduct(null);
+                productRepository.save(product);
+                Long productAmountId = products.get(i).getId();
+                products.remove(products.get(i));
+                productAmountRepository.deleteById(productAmountId);
             }
         }
     }
 
-//    public void addTest(Long prd, String email){
-//        Product product = productRepository.getById(prd);
-//        User user = userRepository.findByEmail(email).get();
-//
-//        Optional<Basket> basketOptional = basketRepository.findByUserId(user.getId(),prd);
-//
-//        if (basketOptional.isPresent()){
-//            basketOptional.get().amountPlus();
-//            basketRepository.save(basketOptional.get());
-//        }else {
-//            Basket basket = new Basket();
-//            basket.setProduct(product);
-//            basket.setUser(user);
-//            basketRepository.save(basket);
-//        }
-//    }
-
-
-    //    @PostConstruct
-//    void ho(){
-//        addTest(1L,"uson@gmail.com");
-//    }
     public void addToBasket(Long productId, String email) {
+        List<ProductAmount> productAmountList = new ArrayList<>();
         Product product = productRepository.getById(productId);
         User user = userRepository.findByEmail(email).get();
-        if (user.getBasket().getProductAmountList().size() < 1) {
+        if (!user.getBasket().getProductList().contains(product)) {
+
             ProductAmount productAmount = new ProductAmount();
-            List<ProductAmount> productAmountList = new ArrayList<>();
+            productAmountList.add(productAmount);
             user.getBasket().setProductAmountList(productAmountList);
             productAmount.setBasket(user.getBasket());
-            productAmountList.add(productAmount);
+
             List<Product> productList = new ArrayList<>();
             productList.add(product);
 
-            List<Basket> basketList = new ArrayList<>();
-            basketList.add(user.getBasket());
-
-            user.getBasket().setProductList(productList);
-            product.setBasketList(basketList);
+            user.getBasket().getProductList().add(product); // add product
+            product.getBasketList().add(user.getBasket());
+            product.setProductAmountList(productAmountList);
 
             addToProductAmount(user.getId(), product, user.getBasket(), productAmount, productList);
             basketRepository.save(user.getBasket());
-            userRepository.save(user);
-            productRepository.save(product);
         } else {
             addAmount(product.getId(), user.getBasket());
+            System.out.println("xxxx");
         }
     }
 
     public void addAmount(Long productId, Basket basket) {
-        for (int i = 0; i < basket.getProductAmountList().size(); i++) {
-            if (basket.getProductAmountList().get(i).getProductId() == productId) {
-                basket.getProductAmountList().get(i).setAmount(basket.getProductAmountList().get(i).getAmount() + 1);
-                basket.getProductAmountList().get(i).setTotal(basket.getProductAmountList().get(i).getTotal() * basket.getProductAmountList().get(i).getAmount());
-                basket.getProductAmountList().get(i).setDiscount(basket.getProductAmountList().get(i).getDiscount() + basket.getProductAmountList().get(i).getDiscount());
-                basket.getProductAmountList().get(i).setGrandTotal(basket.getProductAmountList().get(i).getTotal() - basket.getProductAmountList().get(i).getDiscount());
-                productAmountRepository.save(basket.getProductAmountList().get(i));
+        List<ProductAmount> productAmountList = basket.getProductAmountList();
+        for (int i = 0; i < productAmountList.size(); i++) {
+            if (Objects.equals(productAmountList.get(i).getProductId(), productId)) {
+                productAmountList.get(i).setAmount(productAmountList.get(i).getAmount() + 1);
+                productAmountList.get(i).setTotal(productAmountList.get(i)
+                        .getTotal() * productAmountList.get(i).getAmount());
+                productAmountList.get(i).setDiscount(productAmountList.get(i)
+                        .getDiscount() + productAmountList.get(i).getDiscount());
+                productAmountList.get(i).setGrandTotal(productAmountList.get(i)
+                        .getTotal() - productAmountList.get(i).getDiscount());
+                productAmountRepository.save(productAmountList.get(i));
             }
         }
     }
@@ -155,27 +142,27 @@ public class ShoppingCartService {
         productAmount.setTotal(product.getPrice() * productAmount.getAmount());
         productAmount.setDiscount(productAmount.getTotal() / 100 * product.getDiscount());
         productAmount.setGrandTotal(productAmount.getTotal() - productAmount.getDiscount());
-        productAmount.setProductList(productList);
+        productAmount.setProduct(product);
         productAmount.setProductId(product.getId());
         productAmount.setUserId(userId);
         productAmount.setBasket(basket);
         basketRepository.save(basket);
-//            }
-//        }
     }
 
-    public void productAmount(Long productId, String email) {
-        User user = userRepository.getUserByUsername(email);
+    public void minus(Long productId, String email) {
+        Product product = productRepository.findById(productId).get();
+        User user = userRepository.findByEmail(email).get();
         for (int i = 0; i < user.getBasket().getProductAmountList().size(); i++) {
             if (Objects.equals(productId, user.getBasket().getProductAmountList().get(i).getProductId())) {
-                user.getBasket().getProductAmountList().get(i).setAmount(user.getBasket().getProductAmountList().get(i).getAmount() + 1);
-            }
-        }
-    }public void productAmount2(Long productId , String email) {
-        User user = userRepository.getUserByUsername(email);
-        for (int i = 0; i < user.getBasket().getProductAmountList().size(); i++) {
-            if (Objects.equals(productId, user.getBasket().getProductAmountList().get(i).getProductId())) {
-                user.getBasket().getProductAmountList().get(i).setAmount(user.getBasket().getProductAmountList().get(i).getAmount() - 1);
+                user.getBasket().getProductAmountList().get(i).setAmount(user.getBasket().getProductAmountList()
+                        .get(i).getAmount() - 1);
+                user.getBasket().getProductAmountList().get(i).setTotal(user.getBasket().getProductAmountList().get(i)
+                        .getTotal() - product.getPrice());
+                user.getBasket().getProductAmountList().get(i).setDiscount(user.getBasket().getProductAmountList()
+                        .get(i).getTotal()/100 * product.getDiscount());
+                user.getBasket().getProductAmountList().get(i).setGrandTotal(user.getBasket().getProductAmountList()
+                        .get(i).getTotal() - user.getBasket().getProductAmountList().get(i).getDiscount());
+                productAmountRepository.save(user.getBasket().getProductAmountList().get(i));
             }
         }
     }

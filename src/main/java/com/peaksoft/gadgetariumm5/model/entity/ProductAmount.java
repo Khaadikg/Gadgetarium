@@ -25,9 +25,10 @@ public class ProductAmount {
     private double grandTotal;
     private Long productId;
     private Long userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productAmount")
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinTable(name = "product_id")
     @JsonIgnore
-    private List<Product> productList;
+    private Product product;
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     @JsonIgnore
     @JoinColumn(name = "basket_id")

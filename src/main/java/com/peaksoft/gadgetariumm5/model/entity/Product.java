@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder(toBuilder = true)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,16 +69,15 @@ public class Product {
     private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "products_baskets",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "basket_id"))
     @JsonIgnore
     private List<Basket> basketList;
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "ProductAmount_id")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "product")
     @JsonIgnore
-    private ProductAmount productAmount;
+    private List<ProductAmount> productAmountList;
     private String image;
     private int ram;
     private String video;

@@ -19,21 +19,21 @@ public class Basket {
     @Column(name = "amount")
     private int amount;
     @Column(name = "product_amount")
-    private  int productAmount;
+    private int productAmount;
     @Column(name = "discount")
     private double discount;
     @Column(name = "total")
     private double total;
     @Column(name = "grand_total")
     private double grandTotal;
-    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name ="user_id")
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-    @ManyToMany(cascade = {CascadeType.ALL}, mappedBy = "basketList")
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "basketList")
     @JsonIgnore
     private List<Product> productList;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "basket")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     @JsonIgnore
     private List<ProductAmount> productAmountList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")

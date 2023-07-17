@@ -15,28 +15,26 @@ public class BasketController {
 
     @GetMapping("/getAll")
     public BasketResponse getAll(Principal principal) {
-        System.out.println(principal.getName() + "------");
         return shoppingCartService.getAllBasket(principal.getName());
     }
 
     @PostMapping("/add")
     public String addToBasket(@RequestParam Long id, Principal principal) {
-        System.out.println(principal.getName());
         shoppingCartService.addToBasket(id, principal.getName());
         return "Suuuu";
     }
 
-    @PostMapping("plus")
+    @PostMapping("minus")
     public String minus(@RequestParam Long id,Principal principal) {
-        shoppingCartService.productAmount(id, principal.getName());
+        shoppingCartService.minus(id, principal.getName());
         return "Suuuuuu";
     }
 
-//    @DeleteMapping("delete")
-//    public String deleteProductBasket(@RequestParam("id") Long id, Principal principal) {
-//        shoppingCartService.deleteProduct(id, principal.getName());
-//        return "Suuuuu";
-//    }
+    @DeleteMapping("delete")
+    public String deleteProductBasket(@RequestParam("id") Long id, Principal principal) {
+        shoppingCartService.deleteProduct(id, principal.getName());
+        return "Suuuuu";
+    }
 
 
 }
