@@ -6,7 +6,6 @@ import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
 import com.peaksoft.gadgetariumm5.model.entity.Product;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,7 +71,7 @@ public class ProductService {
         product.setName(productRequest.getName());
         product.setSubCategory(productRequest.getSubCategory());
         product.setWarranty(productRequest.getWarranty());
-        product.setReleaseDate(LocalDate.now());
+        product.setReleaseDate(LocalDate.now() );
         return product;
     }
 
@@ -100,10 +99,7 @@ public class ProductService {
                 .gender(product.getGender())
                 .waterResistance(product.getWaterResistance())
                 .wirelessInterface(product.getWirelessInterface())
-                .discount(product.getDiscount())
-                .sort(product.getSort())
-                .stock(product.getByStock())
-                .build();
+                .discount(product.getDiscount().getPercentage()).build();
 
     }
 
@@ -128,27 +124,5 @@ public class ProductService {
     private List<Product> search(String text, Pageable pageable) {
         String name = text == null ? "" : text;
         return productRepository.searchAndPagination(name.toUpperCase(), pageable);
-    }
-
-    private List<Product> searchSort(String text) {
-        String name = text == null ? "" : text;
-        return productRepository.sorting(name.toUpperCase());
-    }
-
-    public ProductResponseVIew searchTypes(String text) {
-        ProductResponseVIew productResponseVIew = new ProductResponseVIew();
-        productResponseVIew.setProductResponse(view(searchSort(text)));
-        return productResponseVIew;
-    }
-
-    private List<Product> searchStock1(String text) {
-        String name = text == null ? "" : text;
-        return productRepository.searchStock(name.toUpperCase());
-    }
-
-    public ProductResponseVIew searchStock(String text) {
-        ProductResponseVIew vIew = new ProductResponseVIew();
-        vIew.setProductResponse(view(searchStock1(text)));
-        return vIew;
     }
 }
