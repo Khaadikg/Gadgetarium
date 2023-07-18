@@ -74,6 +74,7 @@ public class ShoppingCartService {
         for (int i = 0; i < user.getBasket().getProductList().size(); i++) {
             if (Objects.equals(id, user.getBasket().getProductList().get(i).getId())) {
                 user.getBasket().getProductList().get(i).setBasketList(null);
+                product.setInStock(product.getInStock() + 1);
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
                 remove(product.getId(), user);
@@ -102,7 +103,7 @@ public class ShoppingCartService {
         List<ProductAmount> productAmountList = new ArrayList<>();
         Product product = productRepository.getById(productId);
         User user = userRepository.findByEmail(email).get();
-        if (!user.getBasket().getProductList().contains(product)) {
+        if (!user.getBasket().getProductList().contains(product) && product.getInStock() >= 1) {
 
             ProductAmount productAmount = new ProductAmount();
             productAmountList.add(productAmount);
@@ -118,7 +119,10 @@ public class ShoppingCartService {
 
             addToProductAmount(user.getId(), product, user.getBasket(), productAmount, productList);
             basketRepository.save(user.getBasket());
+            product.setInStock(product.getInStock() - 1);
             productRepository.save(product);
+        } else if (product.getInStock() == 0) {
+            System.out.println("Exception jaz");
         } else {
             addAmount(product.getId(), user.getBasket());
             System.out.println("xxxx");
@@ -126,6 +130,7 @@ public class ShoppingCartService {
     }
 
     public void addAmount(Long productId, Basket basket) {
+        Product product = productRepository.findById(productId).get();
         List<ProductAmount> productAmountList = basket.getProductAmountList();
         for (int i = 0; i < productAmountList.size(); i++) {
             if (Objects.equals(productAmountList.get(i).getProductId(), productId)) {
@@ -136,6 +141,7 @@ public class ShoppingCartService {
                         .getDiscount() + productAmountList.get(i).getDiscount());
                 productAmountList.get(i).setGrandTotal(productAmountList.get(i)
                         .getTotal() - productAmountList.get(i).getDiscount());
+                product.setInStock(product.getInStock() - 1);
                 productAmountRepository.save(productAmountList.get(i));
             }
         }
@@ -156,17 +162,20 @@ public class ShoppingCartService {
     public void minus(Long productId, String email) {
         Product product = productRepository.findById(productId).get();
         User user = userRepository.findByEmail(email).get();
-        for (int i = 0; i < user.getBasket().getProductAmountList().size(); i++) {
-            if (Objects.equals(productId, user.getBasket().getProductAmountList().get(i).getProductId())) {
-                user.getBasket().getProductAmountList().get(i).setAmount(user.getBasket().getProductAmountList()
-                        .get(i).getAmount() - 1);
-                user.getBasket().getProductAmountList().get(i).setTotal(user.getBasket().getProductAmountList().get(i)
-                        .getTotal() - product.getPrice());
-                user.getBasket().getProductAmountList().get(i).setDiscount(user.getBasket().getProductAmountList()
-                        .get(i).getTotal() / 100 * product.getDiscountProduct());
-                user.getBasket().getProductAmountList().get(i).setGrandTotal(user.getBasket().getProductAmountList()
-                        .get(i).getTotal() - user.getBasket().getProductAmountList().get(i).getDiscount());
-                productAmountRepository.save(user.getBasket().getProductAmountList().get(i));
+        List<ProductAmount> productAmountList = user.getBasket().getProductAmountList();
+        for (int i = 0; i < productAmountList.size(); i++) {
+            if (Objects.equals(productId, productAmountList.get(i).getProductId()) && productAmountList.get(i).getAmount() > 1) {
+                productAmountList.get(i).setAmount(productAmountList.get(i).getAmount() - 1);
+                productAmountList.get(i).setTotal(productAmountList.get(i).getTotal() - product.getPrice());
+                productAmountList.get(i).setDiscount(productAmountList.get(i).getTotal() / 100 * product.getDiscountProduct());
+                productAmountList.get(i).setGrandTotal(productAmountList.get(i).getTotal() - productAmountList.get(i).getDiscount());
+                product.setInStock(product.getInStock() + 1);
+                productRepository.save(product);
+                productAmountRepository.save(productAmountList.get(i));
+            } else if (Objects.equals(productId, productAmountList.get(i).getProductId()) && productAmountList.get(i).getAmount() == 1) {
+                deleteProduct(productId, email);
+            } else {
+                System.out.println("Exception jaz");
             }
         }
     }
