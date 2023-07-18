@@ -10,6 +10,7 @@ import com.peaksoft.gadgetariumm5.repository.ProductAmountRepository;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +21,14 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartService {
-    private final BasketRepository basketRepository;
-
-    private final UserRepository userRepository;
-
-    private final ProductRepository productRepository;
-    private final ProductAmountRepository productAmountRepository;
+    @Autowired
+    private BasketRepository basketRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ProductAmountRepository productAmountRepository;
 
     public BasketResponse getAllBasket(String email) {
         User user = userRepository.findByEmail(email).get();
@@ -73,7 +76,7 @@ public class ShoppingCartService {
                 user.getBasket().getProductList().get(i).setBasketList(null);
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
-                remove(product.getId(),user);
+                remove(product.getId(), user);
             } else {
                 System.out.println("not");
             }
@@ -109,12 +112,13 @@ public class ShoppingCartService {
             List<Product> productList = new ArrayList<>();
             productList.add(product);
 
-            user.getBasket().getProductList().add(product); // add product
+            user.getBasket().getProductList().add(product);
             product.getBasketList().add(user.getBasket());
             product.setProductAmountList(productAmountList);
 
             addToProductAmount(user.getId(), product, user.getBasket(), productAmount, productList);
             basketRepository.save(user.getBasket());
+            productRepository.save(product);
         } else {
             addAmount(product.getId(), user.getBasket());
             System.out.println("xxxx");
@@ -140,7 +144,7 @@ public class ShoppingCartService {
     private void addToProductAmount(Long userId, Product product, Basket basket, ProductAmount productAmount, List<Product> productList) {
         productAmount.setAmount(productAmount.getAmount() + 1);
         productAmount.setTotal(product.getPrice() * productAmount.getAmount());
-        productAmount.setDiscount(productAmount.getTotal() / 100 * product.getDiscount());
+        productAmount.setDiscount(productAmount.getTotal() / 100 * product.getDiscountProduct());
         productAmount.setGrandTotal(productAmount.getTotal() - productAmount.getDiscount());
         productAmount.setProduct(product);
         productAmount.setProductId(product.getId());
@@ -159,7 +163,7 @@ public class ShoppingCartService {
                 user.getBasket().getProductAmountList().get(i).setTotal(user.getBasket().getProductAmountList().get(i)
                         .getTotal() - product.getPrice());
                 user.getBasket().getProductAmountList().get(i).setDiscount(user.getBasket().getProductAmountList()
-                        .get(i).getTotal()/100 * product.getDiscount());
+                        .get(i).getTotal() / 100 * product.getDiscountProduct());
                 user.getBasket().getProductAmountList().get(i).setGrandTotal(user.getBasket().getProductAmountList()
                         .get(i).getTotal() - user.getBasket().getProductAmountList().get(i).getDiscount());
                 productAmountRepository.save(user.getBasket().getProductAmountList().get(i));

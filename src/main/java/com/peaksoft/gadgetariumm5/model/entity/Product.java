@@ -28,7 +28,7 @@ public class Product {
     private Long id;
     private String name;
     private double price;
-    private int discount;
+    private int discountProduct;
     private int inStock;
     private int article;
     private File file;

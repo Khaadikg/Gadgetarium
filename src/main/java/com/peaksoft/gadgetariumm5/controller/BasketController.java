@@ -3,6 +3,7 @@ package com.peaksoft.gadgetariumm5.controller;
 import com.peaksoft.gadgetariumm5.dto.BasketResponse;
 import com.peaksoft.gadgetariumm5.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -11,6 +12,7 @@ import java.security.Principal;
 @RequestMapping("/basket")
 @RequiredArgsConstructor
 public class BasketController {
+
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping("/getAll")
@@ -35,6 +37,4 @@ public class BasketController {
         shoppingCartService.deleteProduct(id, principal.getName());
         return "Suuuuu";
     }
-
-
 }

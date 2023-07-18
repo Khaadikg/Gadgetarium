@@ -9,6 +9,6 @@ import java.awt.print.Pageable;
 import java.util.List;
 
 public interface DiscountRepository extends JpaRepository<Discount,Long> {
-    List<Product> getProductsByDiscountId(@PathVariable("id")Long id, Pageable pageable);
+  //  List<Product> getProductsByDiscountId(@PathVariable("id")Long id, Pageable pageable);
 
 }
