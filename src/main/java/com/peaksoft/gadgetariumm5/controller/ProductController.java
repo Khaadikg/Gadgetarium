@@ -54,11 +54,10 @@ public class ProductController {
 
     @GetMapping("/searchSort")
     public ProductResponseVIew getSort(@RequestParam(name = "text", required = false) String text) {
-        return productService.searchTypes(text);
+        return productService.sort(text);
     }
-
     @GetMapping("/searchStock")
-    public ProductResponseVIew getStock(@RequestParam(name = "text", required = false) String text) {
-        return productService.searchStock(text);
+    public ProductResponseVIew getStock(@RequestParam(name = "text", required = false) String text){
+        return productService.stock(text);
     }
 }

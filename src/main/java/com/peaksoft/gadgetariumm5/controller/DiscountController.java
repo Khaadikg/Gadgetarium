@@ -1,13 +1,10 @@
 package com.peaksoft.gadgetariumm5.controller;
-
 import com.peaksoft.gadgetariumm5.dto.DiscountRequest;
 import com.peaksoft.gadgetariumm5.dto.DiscountResponse;
 import com.peaksoft.gadgetariumm5.dto.SimpleResponse;
 import com.peaksoft.gadgetariumm5.service.DiscountService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,7 +18,7 @@ public class DiscountController {
     }
     @PostMapping
     public DiscountResponse create(@RequestBody DiscountRequest discountRequest){
-      return discountService.create(discountRequest);
+        return discountService.create(discountRequest);
     }
     @PutMapping("id")
     public DiscountResponse update(@PathVariable("id")Long id,@RequestBody DiscountRequest discountRequest){
