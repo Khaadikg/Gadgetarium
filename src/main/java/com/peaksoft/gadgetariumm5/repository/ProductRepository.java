@@ -19,7 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "or upper(product.processor)like concat('%',:text,'%')" +
             "or cast(product.price as string )like concat('%',:text,'%') " +
             "or cast(product.article as string )like concat('%',:text,'%')" +
-            "or cast(product.discount as string ) like concat('%',:text,'%')" +
             "or upper(product.wirelessInterface )like concat('%',:text,'%')" +
             "or upper(product.gender)like concat('%',:text,'%')" +
             "or upper(product.operatingSystem)like concat('%',:text,'%')" +

@@ -1,9 +1,7 @@
 package com.peaksoft.gadgetariumm5.controller;
-
 import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
-import com.peaksoft.gadgetariumm5.model.entity.Product;
 import com.peaksoft.gadgetariumm5.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
