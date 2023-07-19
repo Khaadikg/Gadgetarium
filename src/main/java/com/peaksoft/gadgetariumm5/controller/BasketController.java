@@ -2,8 +2,8 @@ package com.peaksoft.gadgetariumm5.controller;
 
 import com.peaksoft.gadgetariumm5.dto.BasketResponse;
 import com.peaksoft.gadgetariumm5.service.ShoppingCartService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -16,6 +16,7 @@ public class BasketController {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping("/getAll")
+    @Operation(summary = "", description = "Only Admin get all Companies")
     public BasketResponse getAll(Principal principal) {
         return shoppingCartService.getAllBasket(principal.getName());
     }

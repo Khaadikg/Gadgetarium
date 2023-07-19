@@ -2,6 +2,7 @@ package com.peaksoft.gadgetariumm5.controller;
 
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.service.EmailService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class ResetPasswordController {
     }
 
     @GetMapping("/resetPassword")
+    @Operation(summary = "",description = "")
     public String sendEmail(@RequestParam String email) {
         User user = emailService.resetPassword(email);
         emailService.sendSimpleMessage(user.getPinCode(), email);
