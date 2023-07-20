@@ -44,14 +44,14 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    @Operation(summary = "Delete",description = "Admim can delete product by id")
+    @Operation(summary = "Delete",description = "Admin and User can delete product by id")
     public String delete(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return "Successfully deleted product with id: " + id;
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search",description = "Admin can search Product")
+    @Operation(summary = "Search",description = "Admin and User can search Product")
     public ProductResponseVIew getProducts(@RequestParam(name = "text", required = false)
                                            String text,
                                            @RequestParam int page,

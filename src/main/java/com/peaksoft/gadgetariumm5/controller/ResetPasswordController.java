@@ -19,7 +19,7 @@ public class ResetPasswordController {
     }
 
     @GetMapping("/resetPassword")
-    @Operation(summary = "",description = "")
+    @Operation(summary = "Sending code",description = "Send a code to create a new password")
     public String sendEmail(@RequestParam String email) {
         User user = emailService.resetPassword(email);
         emailService.sendSimpleMessage(user.getPinCode(), email);
@@ -27,6 +27,7 @@ public class ResetPasswordController {
     }
 
     @GetMapping("/changePassword")
+    @Operation(summary = "Check code ",description = "Check code to create new password")
     public String changePassword(@RequestParam int pinCode,
                                  @RequestParam String password,
                                  @RequestParam String passwordConfirm,

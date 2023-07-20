@@ -1,6 +1,8 @@
 package com.peaksoft.gadgetariumm5.service;
 
 import com.peaksoft.gadgetariumm5.dto.BasketResponse;
+import com.peaksoft.gadgetariumm5.dto.ProductResponse;
+import com.peaksoft.gadgetariumm5.exception.NotFoundException;
 import com.peaksoft.gadgetariumm5.model.entity.Basket;
 import com.peaksoft.gadgetariumm5.model.entity.Product;
 import com.peaksoft.gadgetariumm5.model.entity.ProductAmount;
@@ -29,9 +31,13 @@ public class ShoppingCartService {
     private ProductRepository productRepository;
     @Autowired
     private ProductAmountRepository productAmountRepository;
+    @Autowired
+    private ProductService productService;
 
     public BasketResponse getAllBasket(String email) {
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User not found email " + email)
+        );
         Basket basket = user.getBasket();
         getProductAmount(basket);
         return mapToResponse(basket);
@@ -69,8 +75,12 @@ public class ShoppingCartService {
     }
 
     public void deleteProduct(Long id, String email) {
-        User user = userRepository.findByEmail(email).get();
-        Product product = productRepository.findById(id).get();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User not found email " + email)
+        );
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Product not found by id " + id)
+        );
         for (int i = 0; i < user.getBasket().getProductList().size(); i++) {
             if (Objects.equals(id, user.getBasket().getProductList().get(i).getId())) {
                 user.getBasket().getProductList().get(i).setBasketList(null);
@@ -78,8 +88,6 @@ public class ShoppingCartService {
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
                 remove(product.getId(), user);
-            } else {
-                System.out.println("not");
             }
         }
     }
@@ -88,7 +96,9 @@ public class ShoppingCartService {
         List<ProductAmount> products = user.getBasket().getProductAmountList();
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getProductId().equals(id)) {
-                Product product = productRepository.findById(id).get();
+                Product product = productRepository.findById(id).orElseThrow(
+                        () -> new NotFoundException("Product not found by id " + id)
+                );
                 product.setProductAmountList(null);
                 products.get(i).setProduct(null);
                 productRepository.save(product);
@@ -99,10 +109,14 @@ public class ShoppingCartService {
         }
     }
 
-    public void addToBasket(Long productId, String email) {
+    public ProductResponse addToBasket(Long productId, String email) {
         List<ProductAmount> productAmountList = new ArrayList<>();
-        Product product = productRepository.getById(productId);
-        User user = userRepository.findByEmail(email).get();
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NotFoundException("product not found by id = " + productId)
+        );
+        User user = userRepository.findByEmail(email).orElseThrow(
+
+                () -> new NotFoundException("User not found email " + email));
         if (!user.getBasket().getProductList().contains(product) && product.getInStock() >= 1) {
 
             ProductAmount productAmount = new ProductAmount();
@@ -122,15 +136,17 @@ public class ShoppingCartService {
             product.setInStock(product.getInStock() - 1);
             productRepository.save(product);
         } else if (product.getInStock() == 0) {
-            System.out.println("Exception jaz");
+            throw new NotFoundException("This product out of stock!");
         } else {
             addAmount(product.getId(), user.getBasket());
-            System.out.println("xxxx");
         }
+        return productService.mapToResponse(product);
     }
 
     public void addAmount(Long productId, Basket basket) {
-        Product product = productRepository.findById(productId).get();
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NotFoundException("Product not found by id " + productId)
+        );
         List<ProductAmount> productAmountList = basket.getProductAmountList();
         for (int i = 0; i < productAmountList.size(); i++) {
             if (Objects.equals(productAmountList.get(i).getProductId(), productId)) {
@@ -160,13 +176,17 @@ public class ShoppingCartService {
     }
 
     public void minus(Long productId, String email) {
-        Product product = productRepository.findById(productId).get();
-        User user = userRepository.findByEmail(email).get();
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new NotFoundException("Product not found by id " + productId)
+        );
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User not found email " + email)
+        );
         List<ProductAmount> productAmountList = user.getBasket().getProductAmountList();
         for (int i = 0; i < productAmountList.size(); i++) {
             if (Objects.equals(productId, productAmountList.get(i).getProductId()) && productAmountList.get(i).getAmount() > 1) {
                 productAmountList.get(i).setAmount(productAmountList.get(i).getAmount() - 1);
-                productAmountList.get(i).setTotal(productAmountList.get(i).getTotal() - product.getPrice());
+                productAmountList.get(i).setTotal(product.getPrice() * productAmountList.get(i).getAmount() );
                 productAmountList.get(i).setDiscount(productAmountList.get(i).getTotal() / 100 * product.getDiscountProduct());
                 productAmountList.get(i).setGrandTotal(productAmountList.get(i).getTotal() - productAmountList.get(i).getDiscount());
                 product.setInStock(product.getInStock() + 1);
@@ -174,8 +194,6 @@ public class ShoppingCartService {
                 productAmountRepository.save(productAmountList.get(i));
             } else if (Objects.equals(productId, productAmountList.get(i).getProductId()) && productAmountList.get(i).getAmount() == 1) {
                 deleteProduct(productId, email);
-            } else {
-                System.out.println("Exception jaz");
             }
         }
     }

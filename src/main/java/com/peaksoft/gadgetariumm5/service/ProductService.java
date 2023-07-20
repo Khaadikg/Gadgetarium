@@ -100,7 +100,8 @@ public class ProductService {
                 .gender(product.getGender())
                 .waterResistance(product.getWaterResistance())
                 .wirelessInterface(product.getWirelessInterface())
-                .discount(product.getDiscount().getPercentage()).build();
+//                .discount(product.getDiscount().getPercentage())
+                .build();
 
     }
 
