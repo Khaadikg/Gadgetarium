@@ -1,31 +1,28 @@
 package com.peaksoft.gadgetariumm5.model.entity;
-
 import com.peaksoft.gadgetariumm5.model.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name ="products")
+@Table(name = "products")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double price;
-//    private int discount;
+    //    private int discount;
     private int inStock;
     private int article;
     private File file;
@@ -76,6 +73,10 @@ public class Product {
     private Discount discount;
     @Transient
     private Long discountId;
+    @Enumerated(EnumType.STRING)
+    private Sort sort;
+    @Enumerated(EnumType.STRING)
+    private ByStock byStock;
 
 
 }
