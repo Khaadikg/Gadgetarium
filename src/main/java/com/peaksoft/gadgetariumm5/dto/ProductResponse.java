@@ -39,7 +39,8 @@ public class ProductResponse {
     private WaterResistance waterResistance;
     private int discount;
     private File file;
-
+    private Sort sort;
+    private ByStock stock;
 }
 
 

@@ -4,7 +4,6 @@ import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
 import com.peaksoft.gadgetariumm5.model.entity.Product;
-import com.peaksoft.gadgetariumm5.repository.DiscountRepository;
 import com.peaksoft.gadgetariumm5.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -102,6 +101,7 @@ public class ProductService {
                 .wirelessInterface(product.getWirelessInterface())
                 .discount(product.getDiscount().getPercentage()).build();
 
+
     }
 
     public ProductResponseVIew searchAndPagination(String text, int page, int size) {
@@ -125,5 +125,24 @@ public class ProductService {
     private List<Product> search(String text, Pageable pageable) {
         String name = text == null ? "" : text;
         return productRepository.searchAndPagination(name.toUpperCase(), pageable);
+    }
+
+    private List<Product> searchSort(String text) {
+        String name = text == null ? "" : text;
+        return productRepository.sorting(name.toUpperCase());
+    }
+    public ProductResponseVIew sort(String text){
+        ProductResponseVIew responseVIew = new ProductResponseVIew();
+        responseVIew.setProductResponse(view(searchSort(text)));
+        return responseVIew;
+    }
+    private List<Product> searchStock(String text){
+        String name = text == null? "": text;
+        return  productRepository.searchStock(name.toUpperCase());
+    }
+    public ProductResponseVIew stock(String text){
+        ProductResponseVIew vIew = new ProductResponseVIew();
+        vIew.setProductResponse(view(searchStock(text)));
+        return vIew;
     }
 }

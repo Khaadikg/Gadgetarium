@@ -1,5 +1,4 @@
 package com.peaksoft.gadgetariumm5.controller;
-
 import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
@@ -58,4 +57,12 @@ public class ProductController {
 
     }
 
+    @GetMapping("/searchSort")
+    public ProductResponseVIew getSort(@RequestParam(name = "text", required = false) String text) {
+        return productService.sort(text);
+    }
+    @GetMapping("/searchStock")
+    public ProductResponseVIew getStock(@RequestParam(name = "text", required = false) String text){
+        return productService.stock(text);
+    }
 }
