@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public enum Status {
-    CANCELED,
-    WAY,
+    PENDING,
+    IN_PROCESSING,
+    READY_TO_PICK_UP,
+    RECEIVED,
+    COURIER_ON_THE_ROAD,
     DELIVERED,
-    PROCESSING;
+    CANCEL
 }

@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public enum Delivery {
-    PICKUP,
-    DELIVERY;
+    PICKUP_FROM_THE_STORE,
+    COURIER_DELIVERY
 }

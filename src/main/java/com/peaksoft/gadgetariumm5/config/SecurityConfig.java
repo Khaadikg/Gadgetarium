@@ -42,19 +42,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/jwt/**").permitAll()
-                .antMatchers("/products/search").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .oauth2Login().and().sessionManagement()
-               .sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+                .anyRequest().authenticated()
+                .and().oauth2Login().and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+
     }
 
 }
