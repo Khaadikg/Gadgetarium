@@ -76,6 +76,11 @@ public class Product {
     private Discount discount;
     @Transient
     private Long discountId;
+    @Enumerated(EnumType.STRING)
+    private Sort sort;
+    @Enumerated(EnumType.STRING)
+    private ByStock byStock;
+
 
 
 }
