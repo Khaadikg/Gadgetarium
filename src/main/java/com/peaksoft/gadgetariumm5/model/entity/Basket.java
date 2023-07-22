@@ -36,7 +36,6 @@ public class Basket {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
     @JsonIgnore
     private List<ProductAmount> productAmountList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
-    private List<Order> orders;
+
 
 }

@@ -25,9 +25,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String applicationNumber;
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "order")
-    @JsonIgnore
-    private List<Product> products;
+
     @Enumerated(EnumType.STRING)
     private Delivery delivery;
 

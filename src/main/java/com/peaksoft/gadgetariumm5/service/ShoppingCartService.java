@@ -39,6 +39,13 @@ public class ShoppingCartService {
                 () -> new NotFoundException("User not found email " + email)
         );
         Basket basket = user.getBasket();
+        if (basket.getProductList().size() <= 0) {
+            basket.setAmount(0);
+            basket.setDiscount(0);
+            basket.setTotal(0);
+            basket.setGrandTotal(0);
+            basketRepository.save(basket);
+        }
         getProductAmount(basket);
         return mapToResponse(basket);
 
@@ -86,12 +93,12 @@ public class ShoppingCartService {
                 user.getBasket().getProductList().get(i).setBasketList(null);
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
-                remove(product.getId(), user);
+                removeProductAmount(product.getId(), user);
             }
         }
     }
 
-    public void remove(Long id, User user) {
+    public void removeProductAmount(Long id, User user) {
         List<ProductAmount> products = user.getBasket().getProductAmountList();
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getProductId().equals(id)) {

@@ -19,26 +19,26 @@ public class BasketController {
     private final ShoppingCartService shoppingCartService;
 
     @GetMapping("/getAll")
-    @Operation(summary = "", description = "User get all Basket")
+    @Operation(summary = "Get all", description = "User get all Basket")
     public BasketResponse getAll(Principal principal) {
         return shoppingCartService.getAllBasket(principal.getName());
     }
 
     @PostMapping("/add")
-    @Operation(summary = "", description = "User add product to Basket")
+    @Operation(summary = "Add product to Basket", description = "User add product to Basket")
     public ProductResponse addToBasket(@RequestParam Long id, Principal principal) {
         return shoppingCartService.addToBasket(id, principal.getName());
     }
 
     @PostMapping("minus")
-    @Operation(summary = "", description = "User minus product from Basket")
+    @Operation(summary = "Minus", description = "User minus product from Basket")
     public String minus(@RequestParam Long id, Principal principal) {
         shoppingCartService.minus(id, principal.getName());
         return "Product successfully got minus!";
     }
 
     @DeleteMapping("delete")
-    @Operation(summary = "", description = "User delete product from Basket")
+    @Operation(summary = "Delete product", description = "User delete product from Basket")
     public String deleteProductBasket(@RequestParam("id") Long id, Principal principal) {
         shoppingCartService.deleteProduct(id, principal.getName());
         return "Product deleted!";
