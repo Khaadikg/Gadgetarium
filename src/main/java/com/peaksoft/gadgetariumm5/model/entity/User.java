@@ -50,10 +50,19 @@ public class User implements UserDetails {
     private Long basketId;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Review> reviews;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    private List<Card>cards;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ResponseToReview> responseToReviews;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER,cascade ={CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.DETACH}, mappedBy = "user")
     private List<Order> orders;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "orders=" + orders +
+                '}';
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

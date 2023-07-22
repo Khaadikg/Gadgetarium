@@ -1,5 +1,4 @@
 package com.peaksoft.gadgetariumm5.controller;
-
 import com.peaksoft.gadgetariumm5.dto.ProductRequest;
 import com.peaksoft.gadgetariumm5.dto.ProductResponse;
 import com.peaksoft.gadgetariumm5.dto.ProductResponseVIew;
@@ -7,6 +6,7 @@ import com.peaksoft.gadgetariumm5.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +52,7 @@ public class ProductController {
 
     @GetMapping("/search")
     @Operation(summary = "Search",description = "Admin and User can search Product")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ProductResponseVIew getProducts(@RequestParam(name = "text", required = false)
                                            String text,
                                            @RequestParam int page,
@@ -60,4 +61,12 @@ public class ProductController {
 
     }
 
+    @GetMapping("/searchSort")
+    public ProductResponseVIew getSort(@RequestParam(name = "text", required = false) String text) {
+        return productService.sort(text);
+    }
+    @GetMapping("/searchStock")
+    public ProductResponseVIew getStock(@RequestParam(name = "text", required = false) String text){
+        return productService.stock(text);
+    }
 }

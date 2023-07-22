@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.webjars.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -29,13 +28,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "or upper(product.subCategory) like upper(concat('%',:text,'%') )")
     List<Product> searchAndPagination(@Param("text") String text, Pageable pageable);
 
+    @Query("select p from Product p where  upper(p.sort)like concat('%',:text,'%') ")
+    List<Product> sorting(@Param("text") String text);
 
-    default Product getById(Long prd){
-        Optional<Product> optional = findById(prd);
-        if (optional.isPresent())
-            return optional.get();
-        else
-            throw new NotFoundException("not fouind by id: "+prd);
-    }
+
+    @Query("select product from Product product where upper(product.byStock) like concat('%',:text,'%')")
+    List<Product> searchStock(@Param("text") String text);
+
 }
 

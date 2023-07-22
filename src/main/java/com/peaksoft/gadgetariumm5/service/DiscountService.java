@@ -1,5 +1,4 @@
 package com.peaksoft.gadgetariumm5.service;
-
 import com.peaksoft.gadgetariumm5.dto.DiscountRequest;
 import com.peaksoft.gadgetariumm5.dto.DiscountResponse;
 import com.peaksoft.gadgetariumm5.dto.SimpleResponse;

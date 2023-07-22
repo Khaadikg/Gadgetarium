@@ -15,13 +15,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name ="products")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Builder(toBuilder = true)
+
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,8 +85,10 @@ public class Product {
     private Discount discount;
     @Transient
     private Long discountId;
-    @Transient
-    private long basketId;
+    @Enumerated(EnumType.STRING)
+    private Sort sort;
+    @Enumerated(EnumType.STRING)
+    private ByStock byStock;
 
 
 

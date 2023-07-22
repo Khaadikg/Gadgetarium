@@ -4,7 +4,6 @@ import com.peaksoft.gadgetariumm5.dto.DiscountRequest;
 import com.peaksoft.gadgetariumm5.dto.DiscountResponse;
 import com.peaksoft.gadgetariumm5.dto.SimpleResponse;
 import com.peaksoft.gadgetariumm5.service.DiscountService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

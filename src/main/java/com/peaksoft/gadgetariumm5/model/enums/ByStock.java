@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public enum Payment {
-    BY_CARD_UPON_RECEIPT,
-    BY_CARD_ONLINE,
-    IN_CASH_UPON_RECEIPT
+public enum ByStock {
+    ДО_50,
+    СВЫШЕ_50
+
 
 }
