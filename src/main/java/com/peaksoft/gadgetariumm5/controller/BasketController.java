@@ -13,7 +13,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/basket")
 @RequiredArgsConstructor
-@Tag(name = "Basket controller",description = "add product")
+@Tag(name = "Basket controller", description = "add product")
 public class BasketController {
 
     private final ShoppingCartService shoppingCartService;
@@ -32,7 +32,7 @@ public class BasketController {
 
     @PostMapping("minus")
     @Operation(summary = "", description = "User minus product from Basket")
-    public String minus(@RequestParam Long id,Principal principal) {
+    public String minus(@RequestParam Long id, Principal principal) {
         shoppingCartService.minus(id, principal.getName());
         return "Product successfully got minus!";
     }

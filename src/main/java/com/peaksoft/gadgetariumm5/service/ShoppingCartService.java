@@ -84,7 +84,6 @@ public class ShoppingCartService {
         for (int i = 0; i < user.getBasket().getProductList().size(); i++) {
             if (Objects.equals(id, user.getBasket().getProductList().get(i).getId())) {
                 user.getBasket().getProductList().get(i).setBasketList(null);
-                product.setInStock(product.getInStock() + 1);
                 productRepository.save(user.getBasket().getProductList().get(i));
                 user.getBasket().getProductList().remove(user.getBasket().getProductList().get(i));
                 remove(product.getId(), user);
@@ -101,6 +100,7 @@ public class ShoppingCartService {
                 );
                 product.setProductAmountList(null);
                 products.get(i).setProduct(null);
+                product.setInStock(product.getInStock() + products.get(i).getAmount());
                 productRepository.save(product);
                 Long productAmountId = products.get(i).getId();
                 products.remove(products.get(i));
@@ -186,7 +186,7 @@ public class ShoppingCartService {
         for (int i = 0; i < productAmountList.size(); i++) {
             if (Objects.equals(productId, productAmountList.get(i).getProductId()) && productAmountList.get(i).getAmount() > 1) {
                 productAmountList.get(i).setAmount(productAmountList.get(i).getAmount() - 1);
-                productAmountList.get(i).setTotal(product.getPrice() * productAmountList.get(i).getAmount() );
+                productAmountList.get(i).setTotal(product.getPrice() * productAmountList.get(i).getAmount());
                 productAmountList.get(i).setDiscount(productAmountList.get(i).getTotal() / 100 * product.getDiscountProduct());
                 productAmountList.get(i).setGrandTotal(productAmountList.get(i).getTotal() - productAmountList.get(i).getDiscount());
                 product.setInStock(product.getInStock() + 1);
