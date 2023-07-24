@@ -1,11 +1,14 @@
 package com.peaksoft.gadgetariumm5.service;
 
+import com.peaksoft.gadgetariumm5.config.jwt.JwtTokenUtil;
 import com.peaksoft.gadgetariumm5.dto.UserGoogleResponse;
 import com.peaksoft.gadgetariumm5.dto.UserRequest;
 import com.peaksoft.gadgetariumm5.dto.UserResponse;
+import com.peaksoft.gadgetariumm5.model.entity.Basket;
 import com.peaksoft.gadgetariumm5.model.entity.User;
 import com.peaksoft.gadgetariumm5.model.enums.Role;
 
+import com.peaksoft.gadgetariumm5.repository.BasketRepository;
 import com.peaksoft.gadgetariumm5.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -22,10 +25,14 @@ import java.time.LocalDate;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    private BasketRepository basketRepository;
     private final BCryptPasswordEncoder encoder;
+
+    private final JwtTokenUtil util;
 
     public UserResponse registration(UserRequest request) throws Exception {
         User user = new User();
+        Basket basket = new Basket();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPhoneNumber(request.getPhoneNumber());
@@ -38,9 +45,13 @@ public class UserService {
         }
         user.setRole(Role.USER);
         user.setCreateDate(LocalDate.now());
+        user.setBasket(basket);
+        user.setBasketId(basket.getId());
+        basket.setUser(user);
         userRepository.save(user);
         return mapToUserResponse(user);
     }
+
 
     public UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
@@ -67,11 +78,15 @@ public class UserService {
         String roleName = String.valueOf(roles.getJSONObject(0).get("authority"));
         user.setRole(Role.valueOf(roleName.replace("ROLE_", "")));
         user.setCreateDate(LocalDate.now());
+
         userRepository.save(user);
-        return mapToGoogleResponse(user);
+
+        String token = util.generateToken(user);
+
+        return mapToGoogleResponse(user,token);
     }
 
-    public UserGoogleResponse mapToGoogleResponse(User user) {
+    public UserGoogleResponse mapToGoogleResponse(User user,String token) {
         return UserGoogleResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -79,6 +94,7 @@ public class UserService {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .address(user.getAddress())
+                .token(token)
                 .create(LocalDate.now()).build();
     }
 }

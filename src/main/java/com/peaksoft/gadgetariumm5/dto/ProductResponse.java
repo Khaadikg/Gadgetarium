@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @Builder
 public class ProductResponse {
     private Brand brand;
-    private Basket basket;
     private Long id;
     private String name;
     private double price;

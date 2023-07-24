@@ -1,15 +1,13 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "bucked")
+@Table(name = "baskets")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,14 +18,24 @@ public class Basket {
     private Long id;
     @Column(name = "amount")
     private int amount;
+    @Column(name = "product_amount")
+    private int productAmount;
     @Column(name = "discount")
-    private int discount;
+    private double discount;
     @Column(name = "total")
-    private int total;
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH,CascadeType.REMOVE})
+    private double total;
+    @Column(name = "grand_total")
+    private double grandTotal;
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "basket")
-    private List<Product> products;
-    private Long grandTotal;
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "basketList")
+    @JsonIgnore
+    private List<Product> productList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "basket")
+    @JsonIgnore
+    private List<ProductAmount> productAmountList;
+
+
 }

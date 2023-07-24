@@ -1,11 +1,13 @@
 package com.peaksoft.gadgetariumm5.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.peaksoft.gadgetariumm5.model.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.File;
@@ -25,12 +27,13 @@ public class Product {
     private Long id;
     private String name;
     private double price;
-//    private int discount;
+    private int discountProduct;
     private int inStock;
     private int article;
     private File file;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "brand_id")
+    @JsonIgnore
     private Brand brand;
     private String screen;
     private String color;
@@ -65,9 +68,15 @@ public class Product {
     private List<Category> categories;
     @Enumerated(EnumType.STRING)
     private WaterResistance waterResistance;
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "basket_id")
-    private Basket basket;
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "products_baskets",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "basket_id"))
+    @JsonIgnore
+    private List<Basket> basketList;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "product")
+    @JsonIgnore
+    private List<ProductAmount> productAmountList;
     private String image;
     private int ram;
     private String video;

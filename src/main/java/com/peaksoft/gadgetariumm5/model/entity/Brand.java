@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "brands")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Brand {

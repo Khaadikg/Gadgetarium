@@ -19,4 +19,6 @@ public class UserGoogleResponse {
     private String address;
     private Role role;
     private LocalDate create;
+
+    private String token;
 }
